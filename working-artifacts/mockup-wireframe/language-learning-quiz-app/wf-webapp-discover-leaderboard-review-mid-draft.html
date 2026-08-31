@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinguaQuiz Webapp — Wireframe</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50: '#f3f1ff', 100: '#ebe6fe', 200: '#d9d0fd', 300: '#bcaafa',
+            400: '#9c7ef5', 500: '#7c53ee', 600: '#6a35e0', 700: '#5a29c2',
+            800: '#4a239c', 900: '#3d1f7d'
+          }
+        }
+      }
+    }
+  }
+</script>
+</head>
+<body class="font-['Inter'] bg-gray-50 text-gray-900 antialiased">
+
+<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:px-3 focus:py-2 focus:rounded-lg focus:shadow">Skip to content</a>
+
+<div class="min-h-screen grid grid-cols-1 lg:grid-cols-[240px_1fr]">
+
+  <!-- Sidebar navigation (also acts as screen switcher for this wireframe) -->
+  <aside class="lg:h-screen lg:sticky lg:top-0 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 flex lg:flex-col">
+    <div class="px-5 py-4 flex items-center gap-2 border-b border-gray-100 lg:border-none">
+      <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center font-semibold text-sm" aria-hidden="true">LQ</div>
+      <span class="font-semibold text-gray-900">LinguaQuiz</span>
+    </div>
+    <nav class="flex lg:flex-col flex-1 px-2 lg:px-3 py-2 gap-1 overflow-x-auto lg:overflow-visible" aria-label="Main navigation">
+      <button onclick="showScreen('home')" data-nav="home" class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap bg-brand-50 text-brand-700" aria-current="page">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7m-9-2v10m4-10v10m-9 0h14a1 1 0 001-1v-9.586a1 1 0 00-.293-.707L12 4 4.293 11.707A1 1 0 004 12.414V21a1 1 0 001 1z"/></svg>
+        Home
+      </button>
+      <button onclick="showScreen('discover')" data-nav="discover" class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap text-gray-600 hover:bg-gray-50">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        Discover
+      </button>
+      <button onclick="showScreen('leaderboard')" data-nav="leaderboard" class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap text-gray-600 hover:bg-gray-50">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        Leaderboard
+      </button>
+      <button onclick="showScreen('review')" data-nav="review" class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap text-gray-600 hover:bg-gray-50">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Review Answers
+      </button>
+    </nav>
+    <div class="hidden lg:flex items-center gap-3 px-4 py-4 border-t border-gray-100">
+      <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold" aria-hidden="true">MD</div>
+      <div class="text-sm">
+        <p class="font-medium text-gray-900">Madelyn Dias</p>
+        <p class="text-gray-500">Learner</p>
+      </div>
+    </div>
+  </aside>
+
+  <main id="main" class="min-h-screen pb-16">
+
+    <!-- ============ SCREEN 1: HOME ============ -->
+    <section id="screen-home" class="screen">
+      <header class="bg-white border-b border-gray-200 px-6 py-5">
+        <h1 class="text-xl font-semibold text-gray-900">Good morning, Madelyn</h1>
+        <p class="text-sm text-gray-500 mt-1">Ready to keep your streak going?</p>
+      </header>
+
+      <div class="p-6 space-y-8 max-w-6xl">
+
+        <!-- Continue learning card -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
+          <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-lg bg-brand-100 text-brand-700 flex items-center justify-center" aria-hidden="true">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <div>
+              <p class="text-xs font-medium uppercase tracking-wide text-brand-600">Continue learning</p>
+              <h2 class="font-semibold text-gray-900">A Basic Music Quiz</h2>
+              <p class="text-sm text-gray-500">6 of 10 questions completed</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 sm:w-64">
+            <div class="w-full bg-gray-100 rounded-full h-2" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="Quiz progress">
+              <div class="bg-brand-600 h-2 rounded-full" style="width:60%"></div>
+            </div>
+            <button onclick="showScreen('review')" class="shrink-0 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">Resume</button>
+          </div>
+        </div>
+
+        <!-- Stats row -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <p class="text-sm text-gray-500">Current streak</p>
+            <p class="text-2xl font-semibold text-gray-900 mt-1">12 days</p>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <p class="text-sm text-gray-500">Total points</p>
+            <p class="text-2xl font-semibold text-gray-900 mt-1">2,569 QP</p>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
+            <p class="text-sm text-gray-500">Quizzes completed</p>
+            <p class="text-2xl font-semibold text-gray-900 mt-1">34</p>
+          </div>
+        </div>
+
+        <!-- Recommended -->
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-semibold text-gray-900">Recommended for you</h2>
+            <button onclick="showScreen('discover')" class="text-sm font-medium text-brand-600 hover:text-brand-700">See all</button>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <article class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+              <span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 mb-2">Multiple Choice</span>
+              <h3 class="font-medium text-gray-900">JLPT N4 Vocabulary Sprint</h3>
+              <p class="text-sm text-gray-500 mt-1">Japanese &middot; 12 questions</p>
+            </article>
+            <article class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+              <span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 mb-2">Sentence Rearrangement</span>
+              <h3 class="font-medium text-gray-900">HSK 3 Sentence Builder</h3>
+              <p class="text-sm text-gray-500 mt-1">Chinese &middot; 8 questions</p>
+            </article>
+            <article class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+              <span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 mb-2">Flashcard</span>
+              <h3 class="font-medium text-gray-900">English Idioms, Set 2</h3>
+              <p class="text-sm text-gray-500 mt-1">English &middot; 15 cards</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
+          <strong>Note:</strong> This Home dashboard (streak, points, recommendations) is illustrative only — it is not yet backed by a user story in the backlog. Confirm scope before building.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 2: DISCOVER (US-011) ============ -->
+    <section id="screen-discover" class="screen hidden">
+      <header class="bg-white border-b border-gray-200 px-6 py-5">
+        <h1 class="text-xl font-semibold text-gray-900">Discover quizzes</h1>
+        <p class="text-sm text-gray-500 mt-1">Search and browse the public catalogue</p>
+      </header>
+
+      <div class="p-6 max-w-6xl">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_260px] gap-6">
+
+          <div>
+            <!-- Search + filters -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 mb-4">
+              <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1">
+                  <label for="search" class="sr-only">Search quizzes</label>
+                  <div class="relative">
+                    <svg class="w-5 h-5 text-gray-400 absolute left-3 top-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-4.35-4.35m1.35-5.15a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input id="search" type="text" placeholder="Search by title or description"
+                      class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+                  </div>
+                </div>
+                <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Filter by content language">
+                  <option>All languages</option>
+                  <option>Japanese</option>
+                  <option>Chinese</option>
+                  <option>English</option>
+                </select>
+                <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Filter by question type">
+                  <option>All question types</option>
+                  <option>Multiple Choice</option>
+                  <option>Sentence Rearrangement</option>
+                  <option>Flashcard</option>
+                </select>
+              </div>
+              <p class="text-xs text-gray-500 mt-3">Sorted by: <span class="font-medium text-gray-700">Most played</span> (newest as tiebreaker, per DEC-38)</p>
+            </div>
+
+            <!-- Results grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <article class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700">Multiple Choice</span>
+                  <span class="text-xs text-gray-400">Japanese</span>
+                </div>
+                <h3 class="font-medium text-gray-900">JLPT N4 Vocabulary Sprint</h3>
+                <p class="text-sm text-gray-500 mt-1 flex-1">12 questions &middot; by Ruben Geidt</p>
+                <button class="mt-4 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500">Start quiz</button>
+              </article>
+              <article class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700">Sentence Rearrangement</span>
+                  <span class="text-xs text-gray-400">Chinese</span>
+                </div>
+                <h3 class="font-medium text-gray-900">HSK 3 Sentence Builder</h3>
+                <p class="text-sm text-gray-500 mt-1 flex-1">8 questions &middot; by Adison Press</p>
+                <button class="mt-4 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500">Start quiz</button>
+              </article>
+              <article class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700">Flashcard</span>
+                  <span class="text-xs text-gray-400">English</span>
+                </div>
+                <h3 class="font-medium text-gray-900">English Idioms, Set 2</h3>
+                <p class="text-sm text-gray-500 mt-1 flex-1">15 cards &middot; by Jakob Levin</p>
+                <button class="mt-4 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500">Start quiz</button>
+              </article>
+              <article class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 flex flex-col">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700">Multiple Choice</span>
+                  <span class="text-xs text-gray-400">English</span>
+                </div>
+                <h3 class="font-medium text-gray-900">Statistics for Math Quiz</h3>
+                <p class="text-sm text-gray-500 mt-1 flex-1">10 questions &middot; by Zain Vaccaro</p>
+                <button class="mt-4 px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500">Start quiz</button>
+              </article>
+            </div>
+
+            <!-- Empty state (AC4) reference, collapsed by default -->
+            <div class="hidden mt-6 text-center py-12 bg-white rounded-xl border border-gray-200">
+              <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              <h3 class="mt-2 text-sm font-medium text-gray-900">No quizzes match your search</h3>
+              <p class="mt-1 text-sm text-gray-500">Try a different keyword or clear your filters (AC4).</p>
+              <button class="mt-4 px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg text-sm">Clear filters</button>
+            </div>
+          </div>
+
+          <!-- Right rail: popular now (kept within Most-Played scope, not a social/friends feature) -->
+          <aside class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 h-fit">
+            <h2 class="font-semibold text-gray-900 mb-3">Popular now</h2>
+            <ul class="space-y-3 text-sm">
+              <li class="flex items-center justify-between">
+                <span class="text-gray-700">JLPT N4 Vocabulary Sprint</span>
+                <span class="text-gray-400">312 plays</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span class="text-gray-700">HSK 3 Sentence Builder</span>
+                <span class="text-gray-400">289 plays</span>
+              </li>
+              <li class="flex items-center justify-between">
+                <span class="text-gray-700">English Idioms, Set 2</span>
+                <span class="text-gray-400">201 plays</span>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 3: LEADERBOARD ============ -->
+    <section id="screen-leaderboard" class="screen hidden">
+      <header class="bg-white border-b border-gray-200 px-6 py-5 flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h1 class="text-xl font-semibold text-gray-900">Leaderboard</h1>
+          <p class="text-sm text-gray-500 mt-1">See how you rank among other learners</p>
+        </div>
+        <div class="inline-flex rounded-lg border border-gray-200 p-1 bg-gray-50" role="tablist" aria-label="Leaderboard period">
+          <button onclick="setPeriod('weekly', this)" class="period-btn px-3 py-1.5 text-sm font-medium rounded-md bg-white text-gray-900 shadow-sm" role="tab" aria-selected="true">Weekly</button>
+          <button onclick="setPeriod('alltime', this)" class="period-btn px-3 py-1.5 text-sm font-medium rounded-md text-gray-500" role="tab" aria-selected="false">All Time</button>
+        </div>
+      </header>
+
+      <div class="p-6 max-w-4xl">
+        <!-- Podium -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-6">
+          <div class="flex items-end justify-center gap-6">
+            <div class="text-center">
+              <div class="w-14 h-14 mx-auto rounded-full bg-gray-100 text-gray-700 flex items-center justify-center font-semibold" aria-hidden="true">RG</div>
+              <p class="mt-2 text-sm font-medium text-gray-900">Ruben Geidt</p>
+              <p class="text-xs text-gray-500">1,469 QP</p>
+              <div class="mt-2 h-16 w-20 bg-gray-100 rounded-t-lg flex items-center justify-center font-semibold text-gray-500">2</div>
+            </div>
+            <div class="text-center">
+              <div class="w-16 h-16 mx-auto rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-semibold" aria-hidden="true">AP</div>
+              <p class="mt-2 text-sm font-medium text-gray-900">Adison Press</p>
+              <p class="text-xs text-gray-500">2,569 QP</p>
+              <div class="mt-2 h-24 w-20 bg-amber-100 rounded-t-lg flex items-center justify-center font-semibold text-amber-700">1</div>
+            </div>
+            <div class="text-center">
+              <div class="w-14 h-14 mx-auto rounded-full bg-gray-100 text-gray-700 flex items-center justify-center font-semibold" aria-hidden="true">JL</div>
+              <p class="mt-2 text-sm font-medium text-gray-900">Jakob Levin</p>
+              <p class="text-xs text-gray-500">1,053 QP</p>
+              <div class="mt-2 h-12 w-20 bg-gray-100 rounded-t-lg flex items-center justify-center font-semibold text-gray-500">3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ranked list -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rank</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Learner</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Points</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-500">4</td>
+                <td class="px-6 py-4 text-sm text-gray-900 flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-semibold" aria-hidden="true">MD</span>Madelyn Dias</td>
+                <td class="px-6 py-4 text-sm text-gray-900 text-right">590 QP</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-500">5</td>
+                <td class="px-6 py-4 text-sm text-gray-900 flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-semibold" aria-hidden="true">ZV</span>Zain Vaccaro</td>
+                <td class="px-6 py-4 text-sm text-gray-900 text-right">448 QP</td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm text-gray-500">6</td>
+                <td class="px-6 py-4 text-sm text-gray-900 flex items-center gap-3"><span class="w-8 h-8 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-xs font-semibold" aria-hidden="true">SG</span>Skylar Geidt</td>
+                <td class="px-6 py-4 text-sm text-gray-900 text-right">448 QP</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 mt-6">
+          <strong>Note:</strong> Leaderboard/points/gamification is illustrative only, inspired by the reference screenshot — not yet a backlog item. Add a user story before implementation.
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 4: REVIEW ANSWERS (US-013) ============ -->
+    <section id="screen-review" class="screen hidden">
+      <header class="bg-white border-b border-gray-200 px-6 py-5 flex items-center justify-between">
+        <div>
+          <h1 class="text-xl font-semibold text-gray-900">Review answers</h1>
+          <p class="text-sm text-gray-500 mt-1">A Basic Music Quiz &middot; attempt submitted</p>
+        </div>
+        <button class="p-2 text-gray-400 hover:text-gray-600" aria-label="Close review">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </header>
+
+      <div class="p-6 max-w-3xl space-y-6">
+
+        <!-- Score summary -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex items-center gap-6">
+          <div class="w-20 h-20 rounded-full border-4 border-brand-600 flex items-center justify-center font-semibold text-lg text-brand-700" aria-hidden="true">80%</div>
+          <div>
+            <h2 class="font-semibold text-gray-900">8 of 10 correct</h2>
+            <p class="text-sm text-gray-500 mt-1">Submitted just now &middot; Multiple Choice</p>
+          </div>
+        </div>
+
+        <!-- Question review list -->
+        <div class="space-y-4">
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Q1. Which instrument has 88 keys?</p>
+                <p class="text-sm text-gray-600 mt-1">Your answer: <span class="font-medium text-green-700">Piano</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-red-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Q2. What clef is used for low-pitched notes?</p>
+                <p class="text-sm text-gray-600 mt-1">Your answer: <span class="font-medium text-red-700">Treble clef</span></p>
+                <p class="text-sm text-gray-600">Correct answer: <span class="font-medium text-green-700">Bass clef</span></p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+            <div class="flex items-start gap-3">
+              <svg class="w-5 h-5 text-green-600 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900">Q3. A time signature of 3/4 is commonly called what?</p>
+                <p class="text-sm text-gray-600 mt-1">Your answer: <span class="font-medium text-green-700">Waltz time</span></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <button onclick="showScreen('discover')" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500">Back to Discover</button>
+          <button class="px-4 py-2 bg-brand-600 text-white font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500">Retry quiz</button>
+        </div>
+
+        <p class="text-xs text-gray-500">Maps to US-013 (Play quiz and submit attempt) result state.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Wireframe metadata -->
+<div class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white text-xs p-3 print:hidden flex items-center justify-between flex-wrap gap-2">
+  <div class="flex items-center gap-4 flex-wrap">
+    <span><strong>Screen:</strong> <span id="meta-screen">Home</span></span>
+    <span><strong>Story:</strong> <span id="meta-story">Illustrative (no story)</span></span>
+    <span><strong>Fidelity:</strong> Mid-fi</span>
+    <span><strong>Date:</strong> 2026-08-31</span>
+  </div>
+  <span class="text-gray-400">Reference: Quiz App Mobile UI Kit screenshot (Discover, Leaderboard, Home, Review Answers), adapted for desktop webapp</span>
+</div>
+
+<script>
+  const storyByScreen = {
+    home: 'Illustrative (no story)',
+    discover: 'US-011 Find a quiz',
+    leaderboard: 'Illustrative (no story)',
+    review: 'US-013 Play quiz and submit attempt'
+  };
+
+  function showScreen(id) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+    document.getElementById('screen-' + id).classList.remove('hidden');
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      const active = btn.dataset.nav === id;
+      btn.classList.toggle('bg-brand-50', active);
+      btn.classList.toggle('text-brand-700', active);
+      btn.classList.toggle('text-gray-600', !active);
+      if (active) { btn.setAttribute('aria-current', 'page'); } else { btn.removeAttribute('aria-current'); }
+    });
+
+    document.getElementById('meta-screen').textContent = btnLabel(id);
+    document.getElementById('meta-story').textContent = storyByScreen[id];
+  }
+
+  function btnLabel(id) {
+    return { home: 'Home', discover: 'Discover', leaderboard: 'Leaderboard', review: 'Review Answers' }[id];
+  }
+
+  function setPeriod(period, el) {
+    document.querySelectorAll('.period-btn').forEach(b => {
+      b.classList.remove('bg-white', 'text-gray-900', 'shadow-sm');
+      b.classList.add('text-gray-500');
+      b.setAttribute('aria-selected', 'false');
+    });
+    el.classList.add('bg-white', 'text-gray-900', 'shadow-sm');
+    el.classList.remove('text-gray-500');
+    el.setAttribute('aria-selected', 'true');
+  }
+</script>
+
+</body>
+</html>
