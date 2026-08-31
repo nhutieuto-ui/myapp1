@@ -28,7 +28,7 @@
 
 <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:px-3 focus:py-2 focus:rounded-lg focus:shadow">Skip to content</a>
 
-<div class="min-h-screen grid grid-cols-1 lg:grid-cols-[240px_1fr]">
+<div id="app-shell" class="min-h-screen grid grid-cols-1 lg:grid-cols-[240px_1fr]">
 
   <!-- Sidebar navigation (also acts as screen switcher for this wireframe) -->
   <aside class="lg:h-screen lg:sticky lg:top-0 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 flex lg:flex-col">
@@ -53,13 +53,23 @@
         <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         Review Answers
       </button>
+      <div class="hidden lg:block px-3 pt-4 pb-1 text-xs font-semibold uppercase tracking-wide text-gray-400">Author (Tutor role)</div>
+      <button onclick="showScreen('myquizzes')" data-nav="myquizzes" class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap text-gray-600 hover:bg-gray-50">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17V7a2 2 0 012-2h6a2 2 0 012 2v10a2 2 0 01-2 2H9a2 2 0 01-2-2zm0 0H7a2 2 0 01-2-2V9a2 2 0 012-2h.01M9 7h6"/></svg>
+        My Quizzes
+      </button>
+      <button onclick="showScreen('quizeditor')" data-nav="quizeditor" class="nav-btn flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap text-gray-600 hover:bg-gray-50">
+        <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+        Quiz Editor
+      </button>
     </nav>
-    <div class="hidden lg:flex items-center gap-3 px-4 py-4 border-t border-gray-100">
-      <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold" aria-hidden="true">MD</div>
-      <div class="text-sm">
-        <p class="font-medium text-gray-900">Madelyn Dias</p>
+    <div class="flex items-center gap-3 px-4 py-3 border-t border-gray-100">
+      <div class="w-9 h-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold shrink-0" aria-hidden="true">MD</div>
+      <div class="text-sm flex-1 min-w-0 hidden sm:block">
+        <p class="font-medium text-gray-900 truncate">Madelyn Dias</p>
         <p class="text-gray-500">Learner</p>
       </div>
+      <button onclick="signOut()" class="shrink-0 text-xs font-medium text-gray-600 border border-gray-300 rounded-lg px-3 py-1.5 hover:bg-gray-50 hover:text-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500" aria-label="Log out of LinguaQuiz">Log out</button>
     </div>
   </aside>
 
@@ -388,8 +398,289 @@
       </div>
     </section>
 
+    <!-- ============ SCREEN 5: MY QUIZZES (US-003, US-009) ============ -->
+    <section id="screen-myquizzes" class="screen hidden">
+      <header class="bg-white border-b border-gray-200 px-6 py-5 flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h1 class="text-xl font-semibold text-gray-900">My quizzes</h1>
+          <p class="text-sm text-gray-500 mt-1">Create and manage the quizzes you author</p>
+        </div>
+        <button onclick="showScreen('quizeditor')" class="px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">+ New quiz</button>
+      </header>
+
+      <div class="p-6 max-w-6xl space-y-4">
+        <p class="text-sm text-gray-500">34 of 50 quizzes used (per-author quota, DEC-26)</p>
+
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-50">
+              <tr>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Language</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Questions</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last edited</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">JLPT N4 Vocabulary Sprint</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Japanese</td>
+                <td class="px-6 py-4 text-sm text-gray-600">12 / 30</td>
+                <td class="px-6 py-4"><span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-green-100 text-green-700">Public</span></td>
+                <td class="px-6 py-4 text-sm text-gray-500">2 days ago</td>
+                <td class="px-6 py-4 text-right space-x-3">
+                  <button onclick="showScreen('quizeditor')" class="text-sm font-medium text-brand-600 hover:text-brand-700">Edit</button>
+                  <button class="text-sm font-medium text-gray-500 hover:text-gray-700">Unpublish</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">HSK 3 Sentence Builder</td>
+                <td class="px-6 py-4 text-sm text-gray-600">Chinese</td>
+                <td class="px-6 py-4 text-sm text-gray-600">8 / 30</td>
+                <td class="px-6 py-4"><span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">Unlisted</span></td>
+                <td class="px-6 py-4 text-sm text-gray-500">5 days ago</td>
+                <td class="px-6 py-4 text-right space-x-3">
+                  <button onclick="showScreen('quizeditor')" class="text-sm font-medium text-brand-600 hover:text-brand-700">Edit</button>
+                  <button class="text-sm font-medium text-gray-500 hover:text-gray-700">Unlist</button>
+                </td>
+              </tr>
+              <tr class="hover:bg-gray-50">
+                <td class="px-6 py-4 text-sm font-medium text-gray-900">English Idioms, Set 3 (draft)</td>
+                <td class="px-6 py-4 text-sm text-gray-600">English</td>
+                <td class="px-6 py-4 text-sm text-gray-600">4 / 30</td>
+                <td class="px-6 py-4"><span class="inline-block text-xs font-medium px-2 py-0.5 rounded-full bg-gray-100 text-gray-700">Draft</span></td>
+                <td class="px-6 py-4 text-sm text-gray-500">Today</td>
+                <td class="px-6 py-4 text-right space-x-3">
+                  <button onclick="showScreen('quizeditor')" class="text-sm font-medium text-brand-600 hover:text-brand-700">Edit</button>
+                  <button class="text-sm font-medium text-red-600 hover:text-red-700">Delete</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="text-xs text-gray-500">Drafts (AC5) are private and only visible to their owner (AC6). Deleting a quiz (AC7) requires a confirm step, not shown here.</p>
+      </div>
+    </section>
+
+    <!-- ============ SCREEN 6: QUIZ EDITOR (US-003, US-004/005/006, US-009) ============ -->
+    <section id="screen-quizeditor" class="screen hidden">
+      <header class="bg-white border-b border-gray-200 px-6 py-5 flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <button onclick="showScreen('myquizzes')" class="text-sm text-gray-500 hover:text-gray-700 flex items-center gap-1 mb-1">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Back to My Quizzes
+          </button>
+          <h1 class="text-xl font-semibold text-gray-900">Edit quiz</h1>
+        </div>
+        <div class="flex gap-3">
+          <button class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">Preview as student</button>
+          <button onclick="toggle('publish-modal')" class="px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700">Publish</button>
+        </div>
+      </header>
+
+      <div class="p-6 max-w-4xl space-y-6">
+
+        <!-- Quiz details -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 space-y-4">
+          <div>
+            <label for="quiz-title" class="block text-sm font-medium text-gray-700 mb-1">Quiz title *</label>
+            <input id="quiz-title" type="text" value="English Idioms, Set 3"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+            <p class="mt-1 text-sm text-gray-500">Required to save (AC4).</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="quiz-lang" class="block text-sm font-medium text-gray-700 mb-1">Content language</label>
+              <select id="quiz-lang" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <option>English</option>
+                <option>Japanese</option>
+                <option>Chinese</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Questions</label>
+              <p class="px-3 py-2 text-sm text-gray-600 bg-gray-50 rounded-lg border border-gray-200">4 of 30 used (DEC-16)</p>
+            </div>
+          </div>
+          <div>
+            <label for="quiz-desc" class="block text-sm font-medium text-gray-700 mb-1">Description (optional)</label>
+            <textarea id="quiz-desc" rows="2" placeholder="Common English idioms for intermediate learners"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"></textarea>
+          </div>
+        </div>
+
+        <!-- Question list -->
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <h2 class="font-semibold text-gray-900">Questions (4)</h2>
+            <div class="relative">
+              <button onclick="toggle('add-question-menu')" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50">+ Add question</button>
+              <div id="add-question-menu" class="hidden absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-10 py-1">
+                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Multiple Choice</button>
+                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Sentence Rearrangement</button>
+                <button class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Flashcard</button>
+              </div>
+            </div>
+          </div>
+
+          <ul class="space-y-3">
+            <li class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center gap-4">
+              <svg class="w-5 h-5 text-gray-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9h8M8 15h8"/></svg>
+              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 shrink-0">MCQ</span>
+              <p class="flex-1 text-sm text-gray-900">1. "Break the ice" most nearly means...</p>
+              <button class="text-sm text-gray-500 hover:text-gray-700">Edit</button>
+              <button class="text-sm text-red-600 hover:text-red-700">Delete</button>
+            </li>
+            <li class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center gap-4">
+              <svg class="w-5 h-5 text-gray-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9h8M8 15h8"/></svg>
+              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 shrink-0">Rearrange</span>
+              <p class="flex-1 text-sm text-gray-900">2. Put the words in order: "rain / cats / it's / dogs / raining / and"</p>
+              <button class="text-sm text-gray-500 hover:text-gray-700">Edit</button>
+              <button class="text-sm text-red-600 hover:text-red-700">Delete</button>
+            </li>
+            <li class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center gap-4">
+              <svg class="w-5 h-5 text-gray-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9h8M8 15h8"/></svg>
+              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 shrink-0">Flashcard</span>
+              <p class="flex-1 text-sm text-gray-900">3. "Once in a blue moon" — front/back card</p>
+              <button class="text-sm text-gray-500 hover:text-gray-700">Edit</button>
+              <button class="text-sm text-red-600 hover:text-red-700">Delete</button>
+            </li>
+            <li class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center gap-4">
+              <svg class="w-5 h-5 text-gray-300 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9h8M8 15h8"/></svg>
+              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-brand-50 text-brand-700 shrink-0">MCQ</span>
+              <p class="flex-1 text-sm text-gray-900">4. "Under the weather" means the person is...</p>
+              <button class="text-sm text-gray-500 hover:text-gray-700">Edit</button>
+              <button class="text-sm text-red-600 hover:text-red-700">Delete</button>
+            </li>
+          </ul>
+          <p class="text-xs text-gray-500 mt-3">Drag handle icon indicates reordering (AC2). Adding a 31st question is blocked with a message per AC8.</p>
+        </div>
+      </div>
+
+      <!-- Publish modal (US-009 AC1/AC2) -->
+      <div id="publish-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50" role="dialog" aria-modal="true" aria-labelledby="publish-modal-title">
+        <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+          <h2 id="publish-modal-title" class="text-xl font-semibold text-gray-900">Publish quiz</h2>
+          <p class="mt-2 text-sm text-gray-500">Choose who can find and play this quiz.</p>
+          <div class="mt-4 space-y-3">
+            <label class="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer">
+              <input type="radio" name="visibility" checked class="mt-1">
+              <span>
+                <span class="block text-sm font-medium text-gray-900">Public</span>
+                <span class="block text-sm text-gray-500">Discoverable in search and browse (US-011)</span>
+              </span>
+            </label>
+            <label class="flex items-start gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer">
+              <input type="radio" name="visibility" class="mt-1">
+              <span>
+                <span class="block text-sm font-medium text-gray-900">Unlisted</span>
+                <span class="block text-sm text-gray-500">Reachable only via direct link or QR (DEC-30)</span>
+              </span>
+            </label>
+          </div>
+          <label class="mt-4 flex items-start gap-2 text-sm text-gray-600">
+            <input type="checkbox" class="mt-1">
+            I confirm I have the rights to share this content and accept the visibility statement.
+          </label>
+          <div class="mt-6 flex justify-end gap-3">
+            <button onclick="toggle('publish-modal')" class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg">Cancel</button>
+            <button class="px-4 py-2 bg-brand-600 text-white rounded-lg">Confirm &amp; publish</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 </div>
+
+<!-- ============ SCREEN: SIGN IN / SIGN UP (US-001) ============ -->
+<section id="screen-login" class="screen hidden min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
+  <div class="w-full max-w-md bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+    <div class="flex flex-col items-center gap-2 mb-6">
+      <div class="w-10 h-10 rounded-lg bg-brand-600 text-white flex items-center justify-center font-semibold" aria-hidden="true">LQ</div>
+      <h1 class="text-lg font-semibold text-gray-900">Welcome to LinguaQuiz</h1>
+      <p class="text-sm text-gray-500 text-center">Sign in to play, or sign up to start authoring quizzes.</p>
+    </div>
+
+    <div role="tablist" aria-label="Sign in or sign up" class="grid grid-cols-2 gap-1 bg-gray-100 rounded-lg p-1 mb-6">
+      <button id="tab-signin" role="tab" aria-selected="true" aria-controls="panel-signin" onclick="setAuthTab('signin')" class="px-3 py-2 text-sm font-medium rounded-md bg-white text-gray-900 shadow-sm">Sign in</button>
+      <button id="tab-signup" role="tab" aria-selected="false" aria-controls="panel-signup" onclick="setAuthTab('signup')" class="px-3 py-2 text-sm font-medium rounded-md text-gray-500">Sign up</button>
+    </div>
+
+    <!-- Sign in panel (AC2) -->
+    <div id="panel-signin" role="tabpanel" aria-labelledby="tab-signin" class="space-y-4">
+      <button class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.44c-.28 1.48-1.13 2.73-2.4 3.58v2.98h3.89c2.28-2.1 3.56-5.19 3.56-8.8z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.92l-3.89-2.98c-1.08.72-2.46 1.15-4.04 1.15-3.1 0-5.73-2.09-6.67-4.9H1.32v3.07C3.29 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.33 14.35a7.2 7.2 0 010-4.7V6.58H1.32a12 12 0 000 10.84l4.01-3.07z"/><path fill="#EA4335" d="M12 4.75c1.76 0 3.35.61 4.6 1.8l3.45-3.45C17.94 1.19 15.24 0 12 0 7.31 0 3.29 2.7 1.32 6.58l4.01 3.07C6.27 6.84 8.9 4.75 12 4.75z"/></svg>
+        Continue with Google
+      </button>
+      <div class="flex items-center gap-3 text-xs text-gray-400"><div class="h-px flex-1 bg-gray-200"></div>or continue with email<div class="h-px flex-1 bg-gray-200"></div></div>
+      <div>
+        <label for="signin-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input id="signin-email" type="email" autocomplete="username" placeholder="you@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+      </div>
+      <div>
+        <label for="signin-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input id="signin-password" type="password" autocomplete="current-password" placeholder="••••••••" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+      </div>
+      <button onclick="signIn()" class="w-full px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">Sign in</button>
+      <p class="text-sm text-center text-gray-500">New to LinguaQuiz? <button onclick="setAuthTab('signup')" class="text-brand-600 font-medium hover:text-brand-700">Sign up</button></p>
+    </div>
+
+    <!-- Sign up panel (AC1, AC3, AC5, AC8) -->
+    <div id="panel-signup" role="tabpanel" aria-labelledby="tab-signup" class="hidden space-y-4">
+      <fieldset>
+        <legend class="block text-sm font-medium text-gray-700 mb-2">I am signing up as a... (DEC-11)</legend>
+        <div class="grid grid-cols-2 gap-3">
+          <label class="flex items-center gap-2 p-3 border border-gray-300 rounded-lg cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50">
+            <input type="radio" name="signup-role" value="learner" checked onchange="toggleRoleFields('learner')">
+            <span class="text-sm font-medium text-gray-900">Learner</span>
+          </label>
+          <label class="flex items-center gap-2 p-3 border border-gray-300 rounded-lg cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50">
+            <input type="radio" name="signup-role" value="tutor" onchange="toggleRoleFields('tutor')">
+            <span class="text-sm font-medium text-gray-900">Tutor</span>
+          </label>
+        </div>
+      </fieldset>
+      <button class="w-full flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.49 12.27c0-.79-.07-1.54-.19-2.27H12v4.51h6.44c-.28 1.48-1.13 2.73-2.4 3.58v2.98h3.89c2.28-2.1 3.56-5.19 3.56-8.8z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.92l-3.89-2.98c-1.08.72-2.46 1.15-4.04 1.15-3.1 0-5.73-2.09-6.67-4.9H1.32v3.07C3.29 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.33 14.35a7.2 7.2 0 010-4.7V6.58H1.32a12 12 0 000 10.84l4.01-3.07z"/><path fill="#EA4335" d="M12 4.75c1.76 0 3.35.61 4.6 1.8l3.45-3.45C17.94 1.19 15.24 0 12 0 7.31 0 3.29 2.7 1.32 6.58l4.01 3.07C6.27 6.84 8.9 4.75 12 4.75z"/></svg>
+        Continue with Google
+      </button>
+      <div class="flex items-center gap-3 text-xs text-gray-400"><div class="h-px flex-1 bg-gray-200"></div>or continue with email<div class="h-px flex-1 bg-gray-200"></div></div>
+      <div>
+        <label for="signup-email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+        <input id="signup-email" type="email" autocomplete="username" placeholder="you@example.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+      </div>
+      <div>
+        <label for="signup-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input id="signup-password" type="password" autocomplete="new-password" placeholder="••••••••" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+      </div>
+      <div>
+        <label for="signup-age" class="block text-sm font-medium text-gray-700 mb-1">Age band *</label>
+        <select id="signup-age" class="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+          <option value="">Select an age band</option>
+          <option>Under 13</option>
+          <option>13–17</option>
+          <option selected>18+</option>
+        </select>
+        <p class="mt-1 text-sm text-gray-500">Required to create an account (AC3). Minimum age is 6, applied globally (DEC-9).</p>
+      </div>
+      <div id="rights-confirm-row" class="hidden">
+        <label class="flex items-start gap-2 text-sm text-gray-600">
+          <input type="checkbox" class="mt-1">
+          I confirm any media I later upload will be rights-cleared by me (AC8, DEC-27).
+        </label>
+      </div>
+      <button onclick="signIn()" class="w-full px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2">Create account</button>
+      <p class="text-sm text-center text-gray-500">Already have an account? <button onclick="setAuthTab('signin')" class="text-brand-600 font-medium hover:text-brand-700">Sign in</button></p>
+
+      <!-- Example error state (AC5) reference, collapsed by default -->
+      <div class="hidden p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">This age band is below the minimum age of 6. No account has been created and no further information has been stored (AC5).</div>
+    </div>
+  </div>
+</section>
 
 <!-- Wireframe metadata -->
 <div class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white text-xs p-3 print:hidden flex items-center justify-between flex-wrap gap-2">
@@ -407,12 +698,19 @@
     home: 'Illustrative (no story)',
     discover: 'US-011 Find a quiz',
     leaderboard: 'Illustrative (no story)',
-    review: 'US-013 Play quiz and submit attempt'
+    review: 'US-013 Play quiz and submit attempt',
+    myquizzes: 'US-003 Create and manage quiz draft',
+    quizeditor: 'US-003 / US-004-006 / US-009',
+    login: 'US-001 Sign up and sign in'
   };
 
-  function showScreen(id) {
+  function showScreen(id, authTab) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
     document.getElementById('screen-' + id).classList.remove('hidden');
+
+    // The login screen replaces the whole authenticated app shell (no sidebar nav while signed out)
+    document.getElementById('app-shell').classList.toggle('hidden', id === 'login');
+    if (id === 'login') { setAuthTab(authTab || 'signin'); }
 
     document.querySelectorAll('.nav-btn').forEach(btn => {
       const active = btn.dataset.nav === id;
@@ -427,7 +725,45 @@
   }
 
   function btnLabel(id) {
-    return { home: 'Home', discover: 'Discover', leaderboard: 'Leaderboard', review: 'Review Answers' }[id];
+    return {
+      home: 'Home', discover: 'Discover', leaderboard: 'Leaderboard', review: 'Review Answers',
+      myquizzes: 'My Quizzes', quizeditor: 'Quiz Editor', login: 'Sign in / Sign up'
+    }[id];
+  }
+
+  function toggle(id) {
+    document.getElementById(id).classList.toggle('hidden');
+  }
+
+  // AC7: signing out ends the session and returns the user to the sign-in screen
+  function signOut() {
+    showScreen('login', 'signin');
+  }
+
+  // Demo-only stand-in for a successful AC1/AC2 auth round trip
+  function signIn() {
+    showScreen('home');
+  }
+
+  function setAuthTab(tab) {
+    const isSignup = tab === 'signup';
+    document.getElementById('panel-signin').classList.toggle('hidden', isSignup);
+    document.getElementById('panel-signup').classList.toggle('hidden', !isSignup);
+    document.getElementById('tab-signin').setAttribute('aria-selected', String(!isSignup));
+    document.getElementById('tab-signup').setAttribute('aria-selected', String(isSignup));
+    document.getElementById('tab-signin').classList.toggle('bg-white', !isSignup);
+    document.getElementById('tab-signin').classList.toggle('shadow-sm', !isSignup);
+    document.getElementById('tab-signin').classList.toggle('text-gray-900', !isSignup);
+    document.getElementById('tab-signin').classList.toggle('text-gray-500', isSignup);
+    document.getElementById('tab-signup').classList.toggle('bg-white', isSignup);
+    document.getElementById('tab-signup').classList.toggle('shadow-sm', isSignup);
+    document.getElementById('tab-signup').classList.toggle('text-gray-900', isSignup);
+    document.getElementById('tab-signup').classList.toggle('text-gray-500', !isSignup);
+  }
+
+  // AC8: rights confirmation only applies to the tutor role
+  function toggleRoleFields(role) {
+    document.getElementById('rights-confirm-row').classList.toggle('hidden', role !== 'tutor');
   }
 
   function setPeriod(period, el) {

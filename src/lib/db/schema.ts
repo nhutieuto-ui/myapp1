@@ -1,12 +1,19 @@
 import {
   boolean,
   integer,
+  pgEnum,
   pgTable,
   primaryKey,
   text,
   timestamp,
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccountType } from 'next-auth/adapters';
+
+// US-001 DEC-11: role is chosen explicitly at sign-up, not inferred
+export const userRole = pgEnum('user_role', ['tutor', 'learner']);
+
+// US-001 AC3: age band is mandatory; only bands at or above the global minimum (DEC-9) are ever persisted
+export const ageBand = pgEnum('age_band', ['under_13', 'thirteen_to_17', 'eighteen_plus']);
 
 export const users = pgTable('user', {
   id: text('id')
@@ -16,6 +23,13 @@ export const users = pgTable('user', {
   email: text('email').notNull().unique(),
   emailVerified: timestamp('emailVerified', { mode: 'date' }),
   image: text('image'),
+  // Only set for accounts created via the email/password (Credentials) flow
+  password: text('password'),
+  // Null until sign-up (credentials) or onboarding (OAuth) completes
+  role: userRole('role'),
+  ageBand: ageBand('age_band'),
+  // US-001 AC8 / DEC-27: tutor confirms content rights once, at sign-up
+  tutorRightsConfirmedAt: timestamp('tutorRightsConfirmedAt', { mode: 'date' }),
 });
 
 export const accounts = pgTable(
