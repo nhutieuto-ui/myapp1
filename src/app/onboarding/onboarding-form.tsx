@@ -1,7 +1,6 @@
 'use client';
 
 import { useActionState, useState } from 'react';
-import { Button } from '@/components/ui/button';
 import { ageBandOptions } from '@/lib/validation/auth';
 import { completeOnboarding } from './actions';
 
@@ -11,39 +10,39 @@ export function OnboardingForm() {
 
   return (
     <form action={formAction} className="space-y-4">
-      <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">I am signing up as a... (DEC-11)</legend>
+      <fieldset>
+        <legend className="block text-sm font-medium text-gray-700 mb-2">
+          I am signing up as a... (DEC-11)
+        </legend>
         <div className="grid grid-cols-2 gap-3">
-          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-input p-3 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+          <label className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50">
             <input
               type="radio"
               name="role"
               value="learner"
               checked={role === 'learner'}
               onChange={() => setRole('learner')}
-              className="size-4"
             />
-            <span className="text-sm font-medium">Learner</span>
+            <span className="text-sm font-medium text-gray-900">Learner</span>
           </label>
-          <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-input p-3 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+          <label className="flex items-center gap-2 p-3 border border-gray-300 rounded-lg cursor-pointer has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50">
             <input
               type="radio"
               name="role"
               value="tutor"
               checked={role === 'tutor'}
               onChange={() => setRole('tutor')}
-              className="size-4"
             />
-            <span className="text-sm font-medium">Tutor</span>
+            <span className="text-sm font-medium text-gray-900">Tutor</span>
           </label>
         </div>
         {state?.fieldErrors?.role && (
-          <p className="text-sm text-destructive">{state.fieldErrors.role[0]}</p>
+          <p className="mt-1 text-sm text-red-600">{state.fieldErrors.role[0]}</p>
         )}
       </fieldset>
 
-      <div className="space-y-1.5">
-        <label htmlFor="ageBand" className="text-sm font-medium">
+      <div>
+        <label htmlFor="ageBand" className="block text-sm font-medium text-gray-700 mb-1">
           Age band *
         </label>
         <select
@@ -51,7 +50,7 @@ export function OnboardingForm() {
           name="ageBand"
           required
           defaultValue=""
-          className="h-8 w-full rounded-lg border border-input bg-transparent px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
         >
           <option value="" disabled>
             Select an age band
@@ -62,33 +61,42 @@ export function OnboardingForm() {
             </option>
           ))}
         </select>
-        <p className="text-sm text-muted-foreground">
+        <p className="mt-1 text-sm text-gray-500">
           Required to continue (AC3). Minimum age is 6, applied globally (DEC-9).
         </p>
         {state?.fieldErrors?.ageBand && (
-          <p className="text-sm text-destructive">{state.fieldErrors.ageBand[0]}</p>
+          <p className="mt-1 text-sm text-red-600">{state.fieldErrors.ageBand[0]}</p>
         )}
       </div>
 
       {role === 'tutor' && (
-        <label className="flex items-start gap-2 text-sm text-muted-foreground">
-          <input type="checkbox" name="rightsConfirmed" className="mt-1 size-4" />
-          I confirm any media I later upload will be rights-cleared by me (AC8, DEC-27).
-        </label>
-      )}
-      {state?.fieldErrors?.rightsConfirmed && (
-        <p className="text-sm text-destructive">{state.fieldErrors.rightsConfirmed[0]}</p>
+        <div>
+          <label className="flex items-start gap-2 text-sm text-gray-600">
+            <input type="checkbox" name="rightsConfirmed" className="mt-1" />
+            I confirm any media I later upload will be rights-cleared by me (AC8, DEC-27).
+          </label>
+          {state?.fieldErrors?.rightsConfirmed && (
+            <p className="mt-1 text-sm text-red-600">{state.fieldErrors.rightsConfirmed[0]}</p>
+          )}
+        </div>
       )}
 
       {state?.error && (
-        <p className="text-sm text-destructive" role="alert">
+        <div
+          className="p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700"
+          role="alert"
+        >
           {state.error}
-        </p>
+        </div>
       )}
 
-      <Button type="submit" disabled={pending} className="w-full">
+      <button
+        type="submit"
+        disabled={pending}
+        className="w-full px-4 py-2 bg-brand-600 text-white text-sm font-medium rounded-lg hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 disabled:opacity-60"
+      >
         {pending ? 'Saving…' : 'Continue'}
-      </Button>
+      </button>
     </form>
   );
 }

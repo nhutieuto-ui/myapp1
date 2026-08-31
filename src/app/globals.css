@@ -4,6 +4,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Brand palette from working-artifacts/mockup-wireframe/language-learning-quiz-app */
+@theme {
+  --color-brand-50: #f3f1ff;
+  --color-brand-100: #ebe6fe;
+  --color-brand-200: #d9d0fd;
+  --color-brand-300: #bcaafa;
+  --color-brand-400: #9c7ef5;
+  --color-brand-500: #7c53ee;
+  --color-brand-600: #6a35e0;
+  --color-brand-700: #5a29c2;
+  --color-brand-800: #4a239c;
+  --color-brand-900: #3d1f7d;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

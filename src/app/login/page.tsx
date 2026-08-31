@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { auth } from '@/auth';
+import { AuthTabs } from '@/components/auth-tabs';
 import { LoginForm } from './login-form';
 
 export default async function LoginPage() {
@@ -10,29 +10,24 @@ export default async function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-12">
-      <div className="w-full max-w-md space-y-6 rounded-xl border border-border bg-background p-8 shadow-sm">
-        <div className="flex flex-col items-center gap-2 text-center">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4 py-12">
+      <div className="w-full max-w-md bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+        <div className="flex flex-col items-center gap-2 mb-6">
           <div
-            className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-foreground"
+            className="w-10 h-10 rounded-lg bg-brand-600 text-white flex items-center justify-center font-semibold"
             aria-hidden="true"
           >
             LQ
           </div>
-          <h1 className="text-lg font-semibold">Welcome back</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1 className="text-lg font-semibold text-gray-900">Welcome to LinguaQuiz</h1>
+          <p className="text-sm text-gray-500 text-center">
             Sign in to play, or sign up to start authoring quizzes.
           </p>
         </div>
 
-        <LoginForm />
+        <AuthTabs active="signin" />
 
-        <p className="text-center text-sm text-muted-foreground">
-          New to LinguaQuiz?{' '}
-          <Link href="/signup" className="font-medium text-primary hover:underline">
-            Sign up
-          </Link>
-        </p>
+        <LoginForm />
       </div>
     </div>
   );
