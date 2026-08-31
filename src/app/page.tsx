@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/auth";
 import { LogoutButton } from "@/components/logout-button";
 
@@ -45,6 +46,14 @@ export default async function Home() {
           <span className="font-semibold text-gray-900">LinguaQuiz</span>
         </div>
         <div className="flex items-center gap-3">
+          {session.user.role === "tutor" && (
+            <Link
+              href="/quizzes"
+              className="text-sm font-medium text-gray-600 hover:text-brand-700"
+            >
+              My quizzes
+            </Link>
+          )}
           <div
             className="w-9 h-9 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center text-sm font-semibold shrink-0"
             aria-hidden="true"

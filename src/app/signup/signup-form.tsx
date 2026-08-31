@@ -115,33 +115,38 @@ export function SignUpForm() {
           )}
         </div>
 
-        <div>
-          <label htmlFor="ageBand" className="block text-sm font-medium text-gray-700 mb-1">
-            Age band *
-          </label>
-          <select
-            id="ageBand"
-            name="ageBand"
-            required
-            defaultValue=""
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
-          >
-            <option value="" disabled>
-              Select an age band
-            </option>
-            {ageBandOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+        {role === 'tutor' ? (
+          // Tutors are assumed 18+; age band is still required server-side (AC3) but not shown.
+          <input type="hidden" name="ageBand" value="eighteen_plus" />
+        ) : (
+          <div>
+            <label htmlFor="ageBand" className="block text-sm font-medium text-gray-700 mb-1">
+              Age band *
+            </label>
+            <select
+              id="ageBand"
+              name="ageBand"
+              required
+              defaultValue=""
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+            >
+              <option value="" disabled>
+                Select an age band
               </option>
-            ))}
-          </select>
-          <p className="mt-1 text-sm text-gray-500">
-            Required to create an account (AC3). Minimum age is 6, applied globally (DEC-9).
-          </p>
-          {state?.fieldErrors?.ageBand && (
-            <p className="mt-1 text-sm text-red-600">{state.fieldErrors.ageBand[0]}</p>
-          )}
-        </div>
+              {ageBandOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1 text-sm text-gray-500">
+              Required to create an account (AC3). Minimum age is 6, applied globally (DEC-9).
+            </p>
+            {state?.fieldErrors?.ageBand && (
+              <p className="mt-1 text-sm text-red-600">{state.fieldErrors.ageBand[0]}</p>
+            )}
+          </div>
+        )}
 
         {role === 'tutor' && (
           <div>
