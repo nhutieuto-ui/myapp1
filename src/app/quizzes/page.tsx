@@ -6,6 +6,7 @@ import { db } from '@/lib/db';
 import { quizzes } from '@/lib/db/schema';
 import { contentLanguageOptions, MAX_QUIZZES_PER_AUTHOR } from '@/lib/validation/quiz';
 import { CreateQuizDialog } from './create-quiz-dialog';
+import { ImportQuizDialog } from './import-quiz-dialog';
 import { DeleteQuizButton } from './delete-quiz-button';
 
 const languageLabels = Object.fromEntries(
@@ -54,6 +55,7 @@ export default async function QuizzesPage() {
           >
             Back to Discover
           </Link>
+          <ImportQuizDialog />
           <CreateQuizDialog />
         </div>
       </header>

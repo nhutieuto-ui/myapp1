@@ -3,9 +3,9 @@
 | Field | Value |
 | --- | --- |
 | Source artifact | [Vision & Scope v0.8](../../vision-scope/language-learning-quiz-app/vision-and-scope.md) |
-| Scope covered | **Phase 1 (MVP)** features only — F-01 – F-16, F-21, F-22, F-23. US-020 is a new, not-yet-Sponsor-reviewed addition outside this feature list. |
-| Stories | 20 (US-001 – US-020) grouped into 7 epic folders — **one story per file** |
-| Version / Date | v1.2 — 2026-09-28 |
+| Scope covered | **Phase 1 (MVP)** features only — F-01 – F-16, F-21, F-22, F-23. US-020 and US-021 are new, not-yet-Sponsor-reviewed additions outside this feature list. |
+| Stories | 21 (US-001 – US-021) grouped into 7 epic folders — **one story per file** |
+| Version / Date | v1.3 — 2026-09-28 |
 | Author / Status | BA Agent / **Draft — not refined with the team, not estimated** |
 | Skill applied | `ba-generate-user-story` |
 
@@ -18,6 +18,10 @@
 > **Update (2026-08-30, cont'd again).** Sponsor answered Q-007.1–Q-007.3 and descoped US-008 entirely (DEC-25–DEC-28): media formats **usual image formats + common audio formats, 2MB cap per file** (DEC-25); per-author quota **50 quizzes** (DEC-26, a quiz-count cap — not a storage-size cap); content-rights confirmation moved to **once at sign-up** (DEC-27, see [US-001](epic-a-identity-access-consent/us-001-sign-up-and-sign-in.md) AC8); and **F-08 video upload is fully descoped for Phase 1** (DEC-28), superseding its earlier "Should, first trim candidate" status — [US-008](epic-b-quiz-authoring-media/us-008-attach-video.md) is kept in the backlog but marked Descoped for audit trail.
 >
 > **Update (2026-08-30, final round).** Sponsor answered Q-009.1–Q-014.2 (DEC-29–DEC-45), closing every open question on US-009 through US-014 except **Q-011.3, which remains explicitly deferred** (still blocked by D-6/Legal): moderation owner **the website admin** (DEC-29, partially closes D-7 — response-time target still TBD); a new **Unlisted** visibility tier sits between Draft and Public (DEC-30); public discovery **follows seeded content**, confirming R-9's mitigation as an official decision (DEC-31); share links **do not expire** (DEC-32); a **join code** is added alongside the link/QR (DEC-33); **no attempt or time limits** per share (DEC-34); **a single active link per quiz** is sufficient (DEC-35); link rotation + participant removal is a **sufficient remedy** for a leaked link (DEC-36); **tags/topics are not required** for discovery (DEC-37); default browse order is **most played, then newest** (DEC-38); **retakes are unlimited**, every attempt recorded and visible to the tutor (DEC-39, resolves X-2); **no auto-archiving** of completed entries (DEC-40); **no post-play account-creation prompt** (DEC-41); results show **only the score**, not correct answers (DEC-42, resolves X-3); **sign-in is required** to play a quiz reached via public discovery, distinct from the account-free link/QR path (DEC-43, resolves X-1); flashcard review has **no tutor visibility** (DEC-44) and **no shuffle** (DEC-45). Two pre-existing duplicate/stale rows (US-010's restated Issue I-3, US-012's duplicate "Q-012.3") were also found and corrected during this round. See [US-009](epic-c-publishing-sharing/us-009-publish-quiz-publicly.md) through [US-014](epic-d-discovery-play/us-014-review-flashcard-set.md) for full detail.
+
+> **Update (2026-09-28, cont'd 2).** Broadened [US-021](epic-b-quiz-authoring-media/us-021-import-quiz-from-spreadsheet.md)'s scope at stakeholder direction: import now covers **multiple-choice questions (MCQ) as well as flashcards**, not flashcards-only as first drafted. AS-021.1 updated accordingly; this widening is not backed by a recorded Sponsor decision like DEC-24, so it's flagged as a new open question (Q-021.5) pending formal sign-off.
+
+> **Update (2026-09-28, cont'd).** Added [US-021](epic-b-quiz-authoring-media/us-021-import-quiz-from-spreadsheet.md) — a new, Sponsor-unreviewed story for importing a quiz from an `.xlsx` file. Grounded in the one sourced decision that exists on this topic (DEC-24, "bulk import confirmed nice-to-have," raised under US-006) — sentence-rearrangement import and the exact file format are BA proposals pending Sponsor confirmation (Q-021.2 and others).
 
 > **Update (2026-09-28).** Added [US-020](epic-d-discovery-play/us-020-view-home-dashboard.md) — a new, Sponsor-unreviewed story for the `/` home dashboard screen, which was previously illustrative placeholder UI only (streak/points/recommendations hardcoded, no backing story). US-020 scopes the buildable parts (greeting, a non-personalized discovery preview reusing DEC-38 ordering) and explicitly excludes the unbuildable/undecided parts: resuming an in-progress attempt (the current `attempt` schema has no learner linkage or draft state — Q-020.1) and any streak/points/leaderboard gamification (no sourced business rules — Q-020.2).
 
@@ -53,6 +57,7 @@
 | US-006 | [Author a flashcard](epic-b-quiz-authoring-media/us-006-author-flashcard.md) | Must | US-003 | Draft |
 | US-007 | [Attach an image or audio clip to a question](epic-b-quiz-authoring-media/us-007-attach-image-or-audio.md) | Must | US-003, D-1 | Draft |
 | US-008 | [Attach a video clip to a question](epic-b-quiz-authoring-media/us-008-attach-video.md) | ~~**Should**~~ | US-007 | **Descoped (DEC-28) — not building in Phase 1** |
+| US-021 | [Import a quiz from a spreadsheet (flashcards & multiple-choice)](epic-b-quiz-authoring-media/us-021-import-quiz-from-spreadsheet.md) | Could | US-003, US-004, US-006 | **Draft — new, Sponsor-unreviewed; MCQ scope needs formal sign-off (Q-021.5)** |
 
 ### Epic C — Publishing & Sharing
 
@@ -110,9 +115,9 @@
 | --- | --- | --- |
 | F-01 | Account & role | [US-001](epic-a-identity-access-consent/us-001-sign-up-and-sign-in.md) |
 | F-02 | Create & manage quiz | [US-003](epic-b-quiz-authoring-media/us-003-create-and-manage-quiz-draft.md) |
-| F-03 | Multiple-choice question | [US-004](epic-b-quiz-authoring-media/us-004-author-multiple-choice-question.md) |
+| F-03 | Multiple-choice question | [US-004](epic-b-quiz-authoring-media/us-004-author-multiple-choice-question.md), [US-021](epic-b-quiz-authoring-media/us-021-import-quiz-from-spreadsheet.md) (bulk import) |
 | F-04 | Sentence re-arrangement question | [US-005](epic-b-quiz-authoring-media/us-005-author-sentence-rearrangement-question.md), [US-013](epic-d-discovery-play/us-013-play-quiz-and-submit-attempt.md) |
-| F-05 | Flashcard | [US-006](epic-b-quiz-authoring-media/us-006-author-flashcard.md), [US-014](epic-d-discovery-play/us-014-review-flashcard-set.md) |
+| F-05 | Flashcard | [US-006](epic-b-quiz-authoring-media/us-006-author-flashcard.md), [US-014](epic-d-discovery-play/us-014-review-flashcard-set.md), [US-021](epic-b-quiz-authoring-media/us-021-import-quiz-from-spreadsheet.md) (bulk import) |
 | F-06 | Attach image | [US-007](epic-b-quiz-authoring-media/us-007-attach-image-or-audio.md) |
 | F-07 | Attach audio/voice | [US-007](epic-b-quiz-authoring-media/us-007-attach-image-or-audio.md) |
 | F-08 | ~~Attach video (Should)~~ | **Descoped (DEC-28)** — [US-008](epic-b-quiz-authoring-media/us-008-attach-video.md) |
