@@ -3,9 +3,9 @@
 | Field | Value |
 | --- | --- |
 | Source artifact | [Vision & Scope v0.8](../../vision-scope/language-learning-quiz-app/vision-and-scope.md) |
-| Scope covered | **Phase 1 (MVP)** features only — F-01 – F-16, F-21, F-22, F-23 |
-| Stories | 19 (US-001 – US-019) grouped into 7 epic folders — **one story per file** |
-| Version / Date | v1.1 — 2026-08-30 |
+| Scope covered | **Phase 1 (MVP)** features only — F-01 – F-16, F-21, F-22, F-23. US-020 is a new, not-yet-Sponsor-reviewed addition outside this feature list. |
+| Stories | 20 (US-001 – US-020) grouped into 7 epic folders — **one story per file** |
+| Version / Date | v1.2 — 2026-09-28 |
 | Author / Status | BA Agent / **Draft — not refined with the team, not estimated** |
 | Skill applied | `ba-generate-user-story` |
 
@@ -18,6 +18,8 @@
 > **Update (2026-08-30, cont'd again).** Sponsor answered Q-007.1–Q-007.3 and descoped US-008 entirely (DEC-25–DEC-28): media formats **usual image formats + common audio formats, 2MB cap per file** (DEC-25); per-author quota **50 quizzes** (DEC-26, a quiz-count cap — not a storage-size cap); content-rights confirmation moved to **once at sign-up** (DEC-27, see [US-001](epic-a-identity-access-consent/us-001-sign-up-and-sign-in.md) AC8); and **F-08 video upload is fully descoped for Phase 1** (DEC-28), superseding its earlier "Should, first trim candidate" status — [US-008](epic-b-quiz-authoring-media/us-008-attach-video.md) is kept in the backlog but marked Descoped for audit trail.
 >
 > **Update (2026-08-30, final round).** Sponsor answered Q-009.1–Q-014.2 (DEC-29–DEC-45), closing every open question on US-009 through US-014 except **Q-011.3, which remains explicitly deferred** (still blocked by D-6/Legal): moderation owner **the website admin** (DEC-29, partially closes D-7 — response-time target still TBD); a new **Unlisted** visibility tier sits between Draft and Public (DEC-30); public discovery **follows seeded content**, confirming R-9's mitigation as an official decision (DEC-31); share links **do not expire** (DEC-32); a **join code** is added alongside the link/QR (DEC-33); **no attempt or time limits** per share (DEC-34); **a single active link per quiz** is sufficient (DEC-35); link rotation + participant removal is a **sufficient remedy** for a leaked link (DEC-36); **tags/topics are not required** for discovery (DEC-37); default browse order is **most played, then newest** (DEC-38); **retakes are unlimited**, every attempt recorded and visible to the tutor (DEC-39, resolves X-2); **no auto-archiving** of completed entries (DEC-40); **no post-play account-creation prompt** (DEC-41); results show **only the score**, not correct answers (DEC-42, resolves X-3); **sign-in is required** to play a quiz reached via public discovery, distinct from the account-free link/QR path (DEC-43, resolves X-1); flashcard review has **no tutor visibility** (DEC-44) and **no shuffle** (DEC-45). Two pre-existing duplicate/stale rows (US-010's restated Issue I-3, US-012's duplicate "Q-012.3") were also found and corrected during this round. See [US-009](epic-c-publishing-sharing/us-009-publish-quiz-publicly.md) through [US-014](epic-d-discovery-play/us-014-review-flashcard-set.md) for full detail.
+
+> **Update (2026-09-28).** Added [US-020](epic-d-discovery-play/us-020-view-home-dashboard.md) — a new, Sponsor-unreviewed story for the `/` home dashboard screen, which was previously illustrative placeholder UI only (streak/points/recommendations hardcoded, no backing story). US-020 scopes the buildable parts (greeting, a non-personalized discovery preview reusing DEC-38 ordering) and explicitly excludes the unbuildable/undecided parts: resuming an in-progress attempt (the current `attempt` schema has no learner linkage or draft state — Q-020.1) and any streak/points/leaderboard gamification (no sourced business rules — Q-020.2).
 
 > **Update (2026-08-30, backlog closeout).** Sponsor answered Q-015.1–Q-018.3 (DEC-46–DEC-57), closing every remaining open question in the backlog: no CSV export (DEC-46) and no written feedback channel (DEC-47) for tutors; deleting a student's account does **not** cascade-delete the tutor's copy of their responses, though the overall retention duration stays open at X-6/D-6 (DEC-48, a BA interpretation of a terse "nothing" answer — please confirm); no "who is missing" view (DEC-49) and no merge/relabel/split tool for ambiguous nicknames (DEC-50); tutor-side collections are a separate, out-of-scope need (DEC-51) and there is no default "Saved" collection (DEC-52); a dedicated formal legal/copyright report channel is **descoped** — copyright reports use the general reason categories (DEC-53) — and the reporter is not told the outcome of their report (DEC-54); and, critically, **D-7 is now fully closed (DEC-55): the website admin holds the operator role with a 2-business-day review-turnaround target**, no author appeals process is required (DEC-56), and unpublishing (not hard-delete) is sufficient for a takedown (DEC-57). See [US-015](epic-e-response-review/us-015-review-student-responses.md) through [US-018](epic-g-trust-safety/us-018-review-reports-and-take-down.md) for full detail.
 
@@ -71,6 +73,7 @@
 | US-012 | [Join a quiz by invitation link or QR code](epic-d-discovery-play/us-012-join-quiz-via-link-or-qr.md) | Must | US-010 | Draft — re-shaped by S4 |
 | US-013 | [Play a quiz and submit an attempt](epic-d-discovery-play/us-013-play-quiz-and-submit-attempt.md) | Must | US-004/005/007, US-009/012 | Draft |
 | US-014 | [Review a flashcard set](epic-d-discovery-play/us-014-review-flashcard-set.md) | Must | US-006, US-013 | Draft |
+| US-020 | [View personalized home dashboard](epic-d-discovery-play/us-020-view-home-dashboard.md) | Should | US-009, US-011, US-013 | **Draft — new, Sponsor-unreviewed; positive "resume" case and all gamification explicitly out of scope pending Q-020.1/Q-020.2** |
 
 ### Epic E — Response Collection & Review
 
@@ -115,7 +118,7 @@
 | F-08 | ~~Attach video (Should)~~ | **Descoped (DEC-28)** — [US-008](epic-b-quiz-authoring-media/us-008-attach-video.md) |
 | F-09 | Publish publicly | [US-009](epic-c-publishing-sharing/us-009-publish-quiz-publicly.md) |
 | F-10 | Distribute to learners — **link/QR share (S4)**, not roster assignment | [US-010](epic-c-publishing-sharing/us-010-share-quiz-via-link-or-qr.md), [US-012](epic-d-discovery-play/us-012-join-quiz-via-link-or-qr.md) |
-| F-11 | Find a quiz | [US-011](epic-d-discovery-play/us-011-find-a-quiz.md) (public), [US-012](epic-d-discovery-play/us-012-join-quiz-via-link-or-qr.md) (joined) |
+| F-11 | Find a quiz | [US-011](epic-d-discovery-play/us-011-find-a-quiz.md) (public), [US-012](epic-d-discovery-play/us-012-join-quiz-via-link-or-qr.md) (joined), [US-020](epic-d-discovery-play/us-020-view-home-dashboard.md) (home-page preview, same non-personalized order) |
 | F-12 | Play a quiz | [US-013](epic-d-discovery-play/us-013-play-quiz-and-submit-attempt.md), [US-014](epic-d-discovery-play/us-014-review-flashcard-set.md) |
 | F-13 | Submit & route responses | [US-013](epic-d-discovery-play/us-013-play-quiz-and-submit-attempt.md), [US-015](epic-e-response-review/us-015-review-student-responses.md) |
 | F-14 | Author response review | [US-015](epic-e-response-review/us-015-review-student-responses.md) |
