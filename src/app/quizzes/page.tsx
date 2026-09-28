@@ -47,7 +47,15 @@ export default async function QuizzesPage() {
           <h1 className="text-xl font-semibold text-gray-900">My quizzes</h1>
           <p className="text-sm text-gray-500 mt-1">Create and manage the quizzes you author</p>
         </div>
-        <CreateQuizDialog />
+        <div className="flex items-center gap-4">
+          <Link
+            href="/discover"
+            className="text-sm font-medium text-gray-600 hover:text-brand-700"
+          >
+            Back to Discover
+          </Link>
+          <CreateQuizDialog />
+        </div>
       </header>
 
       <div className="p-6 max-w-6xl mx-auto space-y-4">
