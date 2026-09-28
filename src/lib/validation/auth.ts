@@ -57,3 +57,17 @@ export const onboardingSchema = z
 
 export type OnboardingInput = z.infer<typeof onboardingSchema>;
 
+// US-019 AC3/AC4: same password policy as sign-up, plus a confirmation match check
+export const forgotPasswordSchema = z
+  .object({
+    email: emailSchema,
+    newPassword: passwordSchema,
+    confirmNewPassword: z.string().min(1, 'Confirm your new password'),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: 'Passwords do not match',
+    path: ['confirmNewPassword'],
+  });
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>;
+

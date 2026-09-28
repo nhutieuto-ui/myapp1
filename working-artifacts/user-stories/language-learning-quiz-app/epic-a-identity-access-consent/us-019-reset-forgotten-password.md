@@ -5,118 +5,114 @@
 | Story ID | US-019 |
 | Epic / Feature | Epic A — Identity, Access & Consent / **F-24 (new — not yet in Vision & Scope, see Traceability gap)** |
 | Priority | **Must** — no self-service recovery path exists today for email/password accounts; every locked-out user currently needs manual DB intervention |
-| Status | Draft — **new capability, not sourced from Vision & Scope; needs Product Owner/Sponsor confirmation it is in Phase 1 scope** |
-| Source | Gap identified during development; extends [US-001](us-001-sign-up-and-sign-in.md) (email/password identity provider, DEC-10) |
+| Status | Draft — **Revised (2026-09-28): simplified to a single-screen, no-email-link flow per Sponsor direction. Carries a critical security risk (see Risks/Issues) that needs explicit sign-off before this ships beyond local/dev.** |
+| Source | Gap identified during development; extends [US-001](us-001-sign-up-and-sign-in.md) (email/password identity provider, DEC-10). Flow simplified 2026-09-28 at Sponsor's request. |
 | Backlog | [Backlog index](../README.md) · [Vision & Scope v0.8](../../../vision-scope/language-learning-quiz-app/vision-and-scope.md) |
 
 ## Story statement
 
 > **As a** registered user who signed up with an email and password,
-> **I want to** reset my password from the login screen using my registered email,
-> **so that** I can regain access to my account without contacting support when I forget my password.
+> **I want to** submit my email together with a new password directly on the Forgot Password screen,
+> **so that** I can regain access to my account without contacting support, and without needing to receive or click an emailed link.
 
 ## Preconditions
 
 - The user has an existing account created via the email/password (Credentials) flow ([US-001](us-001-sign-up-and-sign-in.md)). Accounts created via an OAuth provider only (e.g. GitHub/Google) have no password on file.
 - A "Forgot password?" entry point exists on the login screen.
-- **Dependency (new, not yet resolved):** a transactional email-sending service (e.g. Resend, SES, SendGrid) is integrated. No such integration exists in the codebase today — this story cannot ship without it.
+- No transactional email-sending dependency is required for this revision — the previous link/token design and its email-service dependency are removed (see Traceability).
 
 ## Assumptions
 
 | ID | Assumption | Impact if wrong |
 | --- | --- | --- |
-| AS-019.1 | Reset is via a single-use, time-limited link emailed to the registered address (industry-standard pattern); exact token TTL is **TBD** | If a code/OTP flow is preferred instead of a link, the UI and delivery mechanism change |
-| AS-019.2 | To prevent account enumeration (OWASP), the system shows the **same generic confirmation message** whether or not the email matches an account, and whether the account is password-based or OAuth-only | If the business wants explicit "no account found" or "use GitHub sign-in instead" messaging, this trades security for user convenience and needs an explicit decision |
-| AS-019.3 | New password must satisfy the same password policy enforced at sign-up | If a stronger/different policy is wanted specifically for resets, validation rules diverge from sign-up |
-| AS-019.4 | On successful reset, all other active sessions for the account are invalidated | If sessions should persist, a compromised-password scenario is not fully remediated by a reset alone |
-| AS-019.5 | Repeated reset requests for the same email are rate-limited to reduce abuse/email-bombing; exact threshold is **TBD** | Without a limit, the feature can be used to spam a user's inbox |
+| **AS-019.1** | **(Sponsor decision, high risk)** This flow performs **no verification that the requester actually owns/controls the submitted email address** — knowing (or guessing) a registered email is sufficient to overwrite that account's password. This is a deliberate simplification trading identity assurance for implementation simplicity. | Anyone who knows or guesses a user's registered email can take over their account. This is a materially higher risk than a standard emailed-link "forgot password" flow — see the Risk in Traceability. Needs explicit written risk acceptance before real (non-dev) users are exposed to it. |
+| AS-019.2 | To prevent account enumeration (OWASP), the system shows the **same generic confirmation message** after submission whether or not the email matched an account, and whether the matched account was password-based or OAuth-only | If the business wants explicit "no account found" messaging, this trades a small usability gain for a re-introduced enumeration risk |
+| AS-019.3 | The new password and its confirmation must match exactly, checked before any database update | If mismatches should be tolerated (e.g. only warn), validation behavior changes |
+| AS-019.4 | The new password must satisfy the same password policy enforced at sign-up (currently 8–72 characters) | If a stronger/different policy is wanted specifically for resets, validation rules diverge from sign-up |
+| AS-019.5 | OAuth-only accounts (no password on file) are treated the same as "email not registered" — there is no password row to overwrite, so nothing changes and the same generic message is shown | If OAuth-only users should instead be nudged to their OAuth provider, messaging needs to differ per AS-019.2 |
 
 ## Workflow notes
 
-- **Main flow:** user on the login screen selects "Forgot password?" → enters their email → submits → sees a generic confirmation ("If an account exists for this email, a reset link has been sent") → opens the emailed link → lands on a "Set a new password" screen → enters and confirms a new password meeting the policy → submits → password is updated and the link is invalidated → user is redirected to sign in with the new password.
-- **Alternate flow (email not registered, or registered via OAuth only):** the same generic confirmation is shown; no reset email is sent (OAuth-only) or no account matches (unregistered) — no information is disclosed either way (AS-019.2).
-- **Exception flow (expired or already-used link):** the "Set a new password" screen shows an error and an option to request a new link, without revealing whether the underlying account exists.
-- **Exception flow (mismatched confirmation field):** inline validation error; form is not submitted.
-- Mockup: *TBD* — no wireframe exists yet for the login screen's "Forgot password?" entry point or the reset screens.
+- **Main flow (match found):** user on the login screen selects "Forgot password?" → lands on the Forgot Password screen → enters their email, a new password, and a confirmation of the new password → submits → the system finds a matching email/password account → the account's password is updated directly to the new value → the user sees a generic confirmation message.
+- **Main flow (no match):** same screen and inputs, but the email does not match any account, or matches an OAuth-only account with no password on file → the system makes no changes → the user sees the **same** generic confirmation message as the match case (AS-019.2).
+- **Alternate flow (password/confirmation mismatch):** inline validation error; the form is not submitted and no lookup against the database happens.
+- **Alternate flow (new password fails policy):** inline validation error (e.g. too short); the form is not submitted.
+- This is a **single screen, single submit** — there is no separate emailed link, token, or second "set new password" step.
+- Mockup: *TBD* — no wireframe exists yet for the login screen's "Forgot password?" entry point or the Forgot Password screen itself.
 
 ## Acceptance criteria
 
 ```gherkin
-AC1: Request a reset link for a registered email/password account
-  Given I am on the login screen
+AC1: Reset the password directly for a registered email/password account
+  Given I am on the Forgot Password screen
   And I have an existing account created with an email and password
-  When I select "Forgot password?", enter my registered email, and submit
-  Then I see a generic confirmation that a reset link has been sent if an account exists
-  And a single-use, time-limited reset link is emailed to that address
+  When I enter my registered email, a new password, and a matching confirmation, and submit
+  Then my account's password is updated to the new password
+  And I see a generic confirmation message
 
-AC2: No account information is disclosed for an unregistered or OAuth-only email
-  Given I am on the "Forgot password?" form
-  When I submit an email that has no account, or an account that was created via OAuth only (no password)
-  Then I see the same generic confirmation as AC1
-  And no reset email is sent
+AC2: No change is made for an unregistered or OAuth-only email
+  Given I am on the Forgot Password screen
+  When I submit an email that has no account, or that belongs to an OAuth-only account with no password on file, along with a new password and matching confirmation
+  Then no password anywhere is changed
+  And I see the same generic confirmation message as AC1
 
-AC3: Set a new password from a valid reset link
-  Given I have received a valid, unused reset link within its time window
-  When I open the link, enter a new password meeting the password policy, confirm it, and submit
-  Then my password is updated
-  And I am redirected to sign in with the new password
+AC3: New password and confirmation must match
+  Given I am on the Forgot Password screen
+  When I submit a new password and a confirmation that do not match
+  Then the form is not submitted and no account is looked up
+  And I see a validation error indicating the passwords do not match
 
-AC4: Reject an expired or already-used reset link
-  Given a reset link has expired or was already used once
-  When I open that link
-  Then I am told the link is no longer valid
-  And I am offered the option to request a new reset link
+AC4: New password must meet the password policy
+  Given I am on the Forgot Password screen
+  When I submit a new password that does not meet the password policy (e.g. too short)
+  Then the form is not submitted
+  And I see the specific validation error
 
-AC5: New password must meet the sign-up password policy
-  Given I am on the "Set a new password" screen with a valid link
-  When I submit a new password that does not meet the password policy
-  Then the password is not updated
-  And I see the specific validation error(s)
+AC5: Successful and unsuccessful outcomes are indistinguishable to the user
+  Given I have submitted the Forgot Password form with validly-formed input (matching, policy-compliant passwords)
+  When the submission completes, regardless of whether the email matched a resettable account
+  Then the confirmation message text is identical in both cases
+  And no other visible signal (timing, error styling, redirect target) reveals which case occurred
 
-AC6: Reset invalidates other active sessions
-  Given I successfully reset my password
-  When the reset completes
-  Then any other active sessions for my account are signed out
-  And I must sign in again with the new password on any other device
-
-AC7: Repeated reset requests are throttled
-  Given I have already requested a reset link for an email within the throttling window
-  When I request another reset link for the same email before that window elapses
-  Then the system does not send an additional email
-  And I still see the generic confirmation message (no error is disclosed)
+AC6: Reach the Forgot Password screen from login
+  Given I am on the login screen
+  When I select "Forgot password?"
+  Then I am taken to the Forgot Password screen described above
 ```
 
 ## Out of scope
 
-- Changing a password while already signed in and authenticated (a separate "account settings" capability — not currently in the backlog; raise as a new story if needed).
-- Password reset for OAuth-only accounts (they have no password to reset; AC2 covers the non-disclosure behavior, but no "convert to password login" flow is included).
+- **Verifying that the requester actually owns/controls the submitted email address** (e.g. an emailed link, OTP, or magic code) — explicitly removed by this revision; see the critical risk this introduces under Risks/Issues.
+- Any email sending, token, or link/expiry mechanism (fully removed from this revision).
+- Invalidating other active sessions when the password changes (not requested here; raise as a follow-up if needed).
+- Changing a password while already signed in and authenticated (a separate "account settings" capability — not currently in the backlog).
+- Rate limiting or throttling of submissions (not requested; recommended as a follow-up mitigation given AS-019.1 — see Open Questions).
 - Multi-factor authentication or security questions as an alternate recovery path.
-- Email deliverability/bounce handling beyond basic send-and-confirm.
 
 ## Non-functional requirements
 
 | Area | Requirement | Source |
 | --- | --- | --- |
-| Security | Reset tokens are single-use, time-limited, and unguessable (cryptographically random); no account existence is disclosed via response timing or messaging (OWASP) | Inferred — not in Vision & Scope; recommend adding as an explicit NFR |
-| Security | Repeated reset requests are rate-limited per email/IP; exact threshold **TBD** — owner: Solution Architect | AS-019.5 |
-| Availability | A transactional email-sending dependency must be selected and configured; no current SLA defined — **TBD** | New dependency, see Preconditions |
-| Privacy | The reset email contains no other personal data beyond what is needed to complete the reset | §8 Privacy (Vision & Scope), by extension |
+| Security | The new password is hashed with the same algorithm/cost factor used at sign-up (bcrypt) before being stored | Consistency with US-001's sign-up implementation |
+| Security | No account existence is disclosed via response timing, error messaging, or redirect differences (OWASP non-enumeration) | AS-019.2 |
+| **Security (flagged, not yet mitigated)** | **No identity-ownership verification precedes a password change (AS-019.1).** Recommend at minimum per-email/IP rate limiting and abuse monitoring before enabling outside local/dev — **TBD, needs sign-off** | New risk introduced by this revision, see Traceability |
+| Privacy | No personal data beyond the submitted email and password is processed or stored by this flow | §8 Privacy (Vision & Scope), by extension |
 
 ## Traceability
 
 | Item | Reference |
 | --- | --- |
 | Feature | **F-24 (new, proposed)** — Password recovery for credential accounts; not present in Vision & Scope v0.8's feature list (F-01–F-16, F-21–F-23) |
-| Decisions | Extends DEC-10 (email + [OAuth provider] identity providers, US-001) |
-| Dependencies | **New — D-XX (unnumbered): transactional email-sending service is not yet integrated in the codebase** |
-| Risks/Issues | New — account-enumeration risk if AS-019.2's generic-messaging behavior is not implemented as specified |
+| Decisions | Extends DEC-10 (email + [OAuth provider] identity providers, US-001). **New (2026-09-28, unnumbered):** Sponsor directed removal of the emailed link/token step in favor of a direct email + new-password + confirm-password form — see AS-019.1. |
+| Dependencies | **Removed** — the transactional email-sending dependency from the original draft no longer applies to this revision. |
+| Risks/Issues | **New, critical — unnumbered:** because no proof of email ownership is required, any actor who knows or guesses a registered user's email can overwrite that account's password and take it over. This is a materially higher risk than a standard "forgot password" flow. Recommend restricting this flow to local/dev/staging, or pairing it with abuse mitigation (Q-019.2), until Sponsor/Security formally accepts the risk for production use. |
 
 ## Open questions
 
 | # | Area | Question | Blocks |
 | --- | --- | --- | --- |
-| Q-019.1 | Scope | Is password recovery in Phase 1 scope, or is it a Phase 2 candidate? It is not currently listed as a feature in the Vision & Scope document. | Confirming priority/Must status above |
-| Q-019.2 | Technical | Which transactional email provider should be integrated (Resend, SES, SendGrid, other)? None is currently wired into the codebase. | Any implementation of AC1/AC3 |
-| Q-019.3 | Security | What should the reset-link TTL and per-email rate-limit thresholds be? | AC1, AC4, AC7 |
-| Q-019.4 | UX | Should a user who signed up via OAuth-only ever be nudged toward "Sign in with [provider]" instead, or must messaging always stay fully generic (AS-019.2)? | AC2 |
-| Q-019.5 | UX | Does the Vision & Scope's password policy for sign-up need to be documented explicitly, or does one not yet exist and need to be defined for AC5? | AC5 |
+| **Q-019.1** | **Security** | **Is this reduced-assurance flow acceptable for real (non-dev) users, or should it be restricted to local/dev/staging only until an identity-verification step is added?** | Production readiness / Definition of Done |
+| Q-019.2 | Security | Should basic abuse mitigation (e.g. per-email/IP rate limiting, CAPTCHA) be added despite the simplified flow, to reduce automated password-overwrite abuse? | NFR finalization |
+| Q-019.3 | Scope | Is password recovery in Phase 1 scope, or is it a Phase 2 candidate? It is not currently listed as a feature in the Vision & Scope document. | Confirming priority/Must status above |
+| Q-019.4 | UX | Should "Forgot password?" be reachable only from the login screen, or also from other entry points (e.g. sign-up)? | AC6 scope |
+| Q-019.5 | UX | Is the existing sign-up password policy (8–72 characters) sufficient for this flow, or should reset enforce additional rules? | AC4 |

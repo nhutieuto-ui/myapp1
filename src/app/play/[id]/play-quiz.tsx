@@ -310,13 +310,17 @@ export function PlayQuiz({ quizId, questions }: { quizId: string; questions: Pla
 
       {question.type === 'flashcard' && (
         <div>
-          <div className="p-8 border border-gray-200 rounded-lg text-center min-h-32 flex items-center justify-center">
+          <div
+            className="p-8 border border-gray-200 rounded-lg text-center min-h-32 flex items-center justify-center"
+            aria-live="polite"
+          >
             <p className="text-lg text-gray-900">
               {flipped[question.id] ? question.back : question.front}
             </p>
           </div>
           <button
             type="button"
+            aria-pressed={!!flipped[question.id]}
             onClick={() => setFlipped((prev) => ({ ...prev, [question.id]: !prev[question.id] }))}
             className="mt-3 px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50"
           >

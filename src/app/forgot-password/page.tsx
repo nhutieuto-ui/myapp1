@@ -1,10 +1,8 @@
 import { redirect } from 'next/navigation';
-import Link from 'next/link';
 import { auth } from '@/auth';
-import { AuthTabs } from '@/components/auth-tabs';
-import { LoginForm } from './login-form';
+import { ForgotPasswordForm } from './forgot-password-form';
 
-export default async function LoginPage() {
+export default async function ForgotPasswordPage() {
   const session = await auth();
   if (session?.user) {
     redirect('/');
@@ -20,22 +18,14 @@ export default async function LoginPage() {
           >
             LQ
           </div>
-          <h1 className="text-lg font-semibold text-gray-900">Welcome to LinguaQuiz</h1>
+          <h1 className="text-lg font-semibold text-gray-900">Reset your password</h1>
           <p className="text-sm text-gray-500 text-center">
-            Sign in to play, or sign up to start authoring quizzes.
+            Enter your email and a new password. If the email is registered, we&apos;ll update
+            it (US-019).
           </p>
         </div>
 
-        <AuthTabs active="signin" />
-
-        <LoginForm />
-
-        <p className="mt-6 text-sm text-center text-gray-500">
-          Have a join code?{' '}
-          <Link href="/join" className="text-brand-600 font-medium hover:text-brand-700">
-            Join a quiz
-          </Link>
-        </p>
+        <ForgotPasswordForm />
       </div>
     </div>
   );

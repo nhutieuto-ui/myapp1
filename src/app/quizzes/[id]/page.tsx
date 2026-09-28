@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { notFound, redirect } from 'next/navigation';
-import { and, asc, eq } from 'drizzle-orm';
+import { and, asc, eq, isNull } from 'drizzle-orm';
 import { auth } from '@/auth';
 import { db } from '@/lib/db';
 import { quizzes, questions } from '@/lib/db/schema';
 import { contentLanguageOptions, MAX_QUIZZES_PER_AUTHOR } from '@/lib/validation/quiz';
 import { MAX_QUESTIONS_PER_QUIZ } from '@/lib/validation/question';
+import { generateJoinCode } from '@/lib/join-code';
 import { AddQuestionDialog } from './add-question-dialog';
 import { DeleteQuestionButton } from './delete-question-button';
 import { MoveQuestionButtons } from './move-question-buttons';
@@ -64,6 +65,39 @@ export default async function QuizEditorPage({ params }: { params: Promise<{ id:
     notFound();
   }
 
+  // US-010 AC10/DEC-33: backfill a join code for quizzes created before this feature existed.
+  // The UPDATE is conditioned on joinCode still being null so concurrent requests (e.g. two tabs,
+  // or a dev double-render) can't each overwrite an already-assigned code with a different one.
+  if (!quiz.joinCode) {
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      const candidate = generateJoinCode();
+      try {
+        const [updated] = await db
+          .update(quizzes)
+          .set({ joinCode: candidate })
+          .where(and(eq(quizzes.id, quiz.id), isNull(quizzes.joinCode)))
+          .returning({ joinCode: quizzes.joinCode });
+        if (updated) {
+          quiz.joinCode = updated.joinCode;
+        } else {
+          // Another request already assigned one concurrently; use that authoritative value.
+          const [current] = await db
+            .select({ joinCode: quizzes.joinCode })
+            .from(quizzes)
+            .where(eq(quizzes.id, quiz.id))
+            .limit(1);
+          quiz.joinCode = current?.joinCode ?? null;
+        }
+        break;
+      } catch (err) {
+        const isUniqueViolation = err instanceof Error && (err as { code?: string }).code === '23505';
+        if (!isUniqueViolation) {
+          throw err;
+        }
+      }
+    }
+  }
+
   const quizQuestions = await db
     .select()
     .from(questions)
@@ -93,7 +127,7 @@ export default async function QuizEditorPage({ params }: { params: Promise<{ id:
       </header>
 
       <div className="p-6 max-w-4xl mx-auto space-y-6">
-        {quiz.status !== 'draft' && <ShareLink quizId={quiz.id} />}
+        {quiz.status !== 'draft' && <ShareLink quizId={quiz.id} joinCode={quiz.joinCode} />}
 
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>

@@ -37,7 +37,7 @@
 | --- | --- | --- | --- | --- |
 | US-001 | [Sign up and sign in with a role and age band](epic-a-identity-access-consent/us-001-sign-up-and-sign-in.md) | Must | — | Draft |
 | US-002 | [Guardian consent for minor learners](epic-a-identity-access-consent/us-002-guardian-consent-for-minors.md) | Must | US-001 | **Draft — D-6 partially closed (DEC-9/12/13/14); mechanism pending Legal sign-off** |
-| US-019 | [Reset a forgotten password](epic-a-identity-access-consent/us-019-reset-forgotten-password.md) | Must | US-001 | **Draft — new capability, not yet in Vision & Scope (F-24 proposed); needs Sponsor confirmation + email-service dependency** |
+| US-019 | [Reset a forgotten password](epic-a-identity-access-consent/us-019-reset-forgotten-password.md) | Must | US-001 | **Draft — Revised: simplified, no email link/token (email + new password + confirm). Carries a critical, flagged account-takeover risk (no proof of email ownership) needing Sponsor/Security sign-off** |
 
 ### Epic B — Quiz Authoring & Media
 

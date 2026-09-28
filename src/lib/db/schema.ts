@@ -56,6 +56,8 @@ export const quizzes = pgTable('quiz', {
   status: quizStatus('status').notNull().default('draft'),
   // Denormalized count, updated as questions are added/removed (US-004/005/006, not yet implemented)
   questionCount: integer('question_count').notNull().default(0),
+  // US-010 AC10/DEC-33: short human-readable code, an alternative to the join link/QR
+  joinCode: text('join_code').unique(),
   // US-009 AC6: author's content-rights/acceptable-use acceptance, recorded with a timestamp at publish time
   rightsConfirmedAt: timestamp('rightsConfirmedAt', { mode: 'date' }),
   publishedAt: timestamp('publishedAt', { mode: 'date' }),

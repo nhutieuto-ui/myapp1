@@ -1,6 +1,9 @@
 import type { NextAuthConfig } from 'next-auth';
 
-const PUBLIC_PATHS = ['/login', '/signup'];
+// Redirects a logged-in visitor away (sign-in/sign-up pages don't make sense once authenticated).
+const AUTH_ONLY_PATHS = ['/login', '/signup', '/forgot-password'];
+// US-012: no sign-in required to join a quiz, and a signed-in user may still use it too.
+const ALWAYS_PUBLIC_PATHS = ['/join'];
 
 // Edge-safe config (no adapter, no Node-only providers) so this can run in middleware.
 export const authConfig = {
@@ -12,9 +15,13 @@ export const authConfig = {
     authorized({ auth, request }) {
       const isLoggedIn = !!auth?.user;
       const { pathname } = request.nextUrl;
-      const isPublicPath = PUBLIC_PATHS.some((path) => pathname.startsWith(path));
 
-      if (isPublicPath) {
+      if (ALWAYS_PUBLIC_PATHS.some((path) => pathname.startsWith(path))) {
+        return true;
+      }
+
+      const isAuthOnlyPath = AUTH_ONLY_PATHS.some((path) => pathname.startsWith(path));
+      if (isAuthOnlyPath) {
         if (isLoggedIn) {
           return Response.redirect(new URL('/', request.nextUrl));
         }

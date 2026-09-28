@@ -6,6 +6,9 @@ import { auth } from '@/auth';
 import { db } from '@/lib/db';
 import { quizzes } from '@/lib/db/schema';
 import { createQuizSchema, MAX_QUIZZES_PER_AUTHOR } from '@/lib/validation/quiz';
+import { generateJoinCode } from '@/lib/join-code';
+
+const JOIN_CODE_INSERT_ATTEMPTS = 5;
 
 export type CreateQuizState =
   | {
@@ -47,15 +50,27 @@ export async function createQuiz(
 
   const { title, contentLanguage, description } = parsed.data;
 
-  await db.insert(quizzes).values({
-    ownerId: session.user.id,
-    title,
-    contentLanguage,
-    description,
-  });
+  // US-010 AC10/DEC-33: assign a unique join code, retrying on the rare collision
+  for (let attempt = 0; attempt < JOIN_CODE_INSERT_ATTEMPTS; attempt += 1) {
+    try {
+      await db.insert(quizzes).values({
+        ownerId: session.user.id,
+        title,
+        contentLanguage,
+        description,
+        joinCode: generateJoinCode(),
+      });
+      revalidatePath('/quizzes');
+      return { success: true };
+    } catch (err) {
+      const isUniqueViolation = err instanceof Error && (err as { code?: string }).code === '23505';
+      if (!isUniqueViolation || attempt === JOIN_CODE_INSERT_ATTEMPTS - 1) {
+        throw err;
+      }
+    }
+  }
 
-  revalidatePath('/quizzes');
-  return { success: true };
+  return { error: 'Could not create the quiz. Please try again.' };
 }
 
 export type DeleteQuizState = { error?: string } | undefined;

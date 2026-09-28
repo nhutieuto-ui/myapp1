@@ -36,6 +36,13 @@
       "when": 1788163498837,
       "tag": "0004_perfect_black_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1790569840392,
+      "tag": "0005_abnormal_harpoon",
+      "breakpoints": true
     }
   ]
 }
