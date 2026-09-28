@@ -79,6 +79,39 @@ export const questions = pgTable('question', {
   updatedAt: timestamp('updatedAt', { mode: 'date' }).notNull().defaultNow(),
 });
 
+// US-013 AS-013.5: link/QR-joined players have no account — attributed by a self-reported display name
+export const attempts = pgTable('attempt', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  quizId: text('quizId')
+    .notNull()
+    .references(() => quizzes.id, { onDelete: 'cascade' }),
+  participantName: text('participantName').notNull(),
+  // AS-013.1: score counts only auto-scored question types (mcq, sentence_rearrangement)
+  score: integer('score').notNull(),
+  scoredQuestionCount: integer('scoredQuestionCount').notNull(),
+  submittedAt: timestamp('submittedAt', { mode: 'date' }).notNull().defaultNow(),
+  createdAt: timestamp('createdAt', { mode: 'date' }).notNull().defaultNow(),
+});
+
+export const responses = pgTable('response', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  attemptId: text('attemptId')
+    .notNull()
+    .references(() => attempts.id, { onDelete: 'cascade' }),
+  questionId: text('questionId')
+    .notNull()
+    .references(() => questions.id, { onDelete: 'cascade' }),
+  // Participant's submitted answer (selected option indices, ordered segment list, or null for flashcards)
+  answer: jsonb('answer'),
+  // Null for unscored question types (flashcard, AS-013.1)
+  correct: boolean('correct'),
+  createdAt: timestamp('createdAt', { mode: 'date' }).notNull().defaultNow(),
+});
+
 export const accounts = pgTable(
   'account',
   {

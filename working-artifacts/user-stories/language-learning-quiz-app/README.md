@@ -4,7 +4,7 @@
 | --- | --- |
 | Source artifact | [Vision & Scope v0.8](../../vision-scope/language-learning-quiz-app/vision-and-scope.md) |
 | Scope covered | **Phase 1 (MVP)** features only — F-01 – F-16, F-21, F-22, F-23 |
-| Stories | 18 (US-001 – US-018) grouped into 7 epic folders — **one story per file** |
+| Stories | 19 (US-001 – US-019) grouped into 7 epic folders — **one story per file** |
 | Version / Date | v1.1 — 2026-08-30 |
 | Author / Status | BA Agent / **Draft — not refined with the team, not estimated** |
 | Skill applied | `ba-generate-user-story` |
@@ -37,6 +37,7 @@
 | --- | --- | --- | --- | --- |
 | US-001 | [Sign up and sign in with a role and age band](epic-a-identity-access-consent/us-001-sign-up-and-sign-in.md) | Must | — | Draft |
 | US-002 | [Guardian consent for minor learners](epic-a-identity-access-consent/us-002-guardian-consent-for-minors.md) | Must | US-001 | **Draft — D-6 partially closed (DEC-9/12/13/14); mechanism pending Legal sign-off** |
+| US-019 | [Reset a forgotten password](epic-a-identity-access-consent/us-019-reset-forgotten-password.md) | Must | US-001 | **Draft — new capability, not yet in Vision & Scope (F-24 proposed); needs Sponsor confirmation + email-service dependency** |
 
 ### Epic B — Quiz Authoring & Media
 

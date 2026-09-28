@@ -10,6 +10,7 @@ import { AddQuestionDialog } from './add-question-dialog';
 import { DeleteQuestionButton } from './delete-question-button';
 import { MoveQuestionButtons } from './move-question-buttons';
 import { PublishDialog } from './publish-dialog';
+import { ShareLink } from './share-link';
 
 const languageLabels = Object.fromEntries(
   contentLanguageOptions.map((option) => [option.value, option.label])
@@ -92,6 +93,8 @@ export default async function QuizEditorPage({ params }: { params: Promise<{ id:
       </header>
 
       <div className="p-6 max-w-4xl mx-auto space-y-6">
+        {quiz.status !== 'draft' && <ShareLink quizId={quiz.id} />}
+
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <p className="text-sm font-medium text-gray-700">Content language</p>
