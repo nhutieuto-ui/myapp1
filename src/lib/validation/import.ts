@@ -1,4 +1,4 @@
-// US-021: import a quiz (flashcards & MCQ) from a single-sheet .xlsx workbook
+// US-021: import flashcards from a single-sheet .xlsx workbook
 
 // US-021 DEC (this session): import-specific row cap, tighter than MAX_QUESTIONS_PER_QUIZ (DEC-16)
 export const MAX_IMPORT_ROWS = 20;
@@ -10,9 +10,9 @@ export const MAX_IMPORT_FILE_SIZE_BYTES = 2 * 1024 * 1024;
 export const IMPORT_FILE_EXTENSION = '.xlsx';
 export const IMPORT_FILE_MIME_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
-// US-021: the sheet's `Type` column selects which question schema a row is validated against
-export const IMPORT_ROW_TYPES = ['flashcard', 'mcq'] as const;
+// US-021 DEC-24: only flashcard rows are approved for bulk import
+export const IMPORT_ROW_TYPES = ['flashcard'] as const;
 export type ImportRowType = (typeof IMPORT_ROW_TYPES)[number];
 
-// Required sheet columns (case-insensitive) — AC10
-export const IMPORT_REQUIRED_COLUMNS = ['type', 'prompt'] as const;
+// Required sheet columns (case-insensitive) — flashcard import needs both sides present
+export const IMPORT_REQUIRED_COLUMNS = ['type', 'prompt', 'back'] as const;

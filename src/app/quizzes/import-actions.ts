@@ -2,6 +2,7 @@
 
 import { count, eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { auth } from '@/auth';
 import { db } from '@/lib/db';
 import { quizzes, questions } from '@/lib/db/schema';
@@ -16,7 +17,6 @@ export type ImportQuizState =
   | {
       error?: string;
       fieldErrors?: Record<string, string[] | undefined>;
-      success?: boolean;
     }
   | undefined;
 
@@ -92,7 +92,7 @@ export async function importQuiz(_prevState: ImportQuizState, formData: FormData
         db.insert(questions).values(questionValues),
       ]);
       revalidatePath('/quizzes');
-      return { success: true };
+      redirect(`/quizzes/${quizId}`);
     } catch (err) {
       const isUniqueViolation = err instanceof Error && (err as { code?: string }).code === '23505';
       if (!isUniqueViolation || attempt === JOIN_CODE_INSERT_ATTEMPTS - 1) {

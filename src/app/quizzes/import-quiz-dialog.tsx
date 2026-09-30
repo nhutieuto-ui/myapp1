@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState, useEffect, useRef, useState } from 'react';
+import { useActionState, useState } from 'react';
 import { contentLanguageOptions } from '@/lib/validation/quiz';
 import { MAX_IMPORT_ROWS } from '@/lib/validation/import';
 import { importQuiz } from './import-actions';
@@ -8,14 +8,6 @@ import { importQuiz } from './import-actions';
 export function ImportQuizDialog() {
   const [open, setOpen] = useState(false);
   const [state, formAction, pending] = useActionState(importQuiz, undefined);
-  const formRef = useRef<HTMLFormElement>(null);
-
-  useEffect(() => {
-    if (state?.success) {
-      formRef.current?.reset();
-      setOpen(false);
-    }
-  }, [state]);
 
   return (
     <>
@@ -39,11 +31,11 @@ export function ImportQuizDialog() {
               Import quiz from spreadsheet
             </h2>
             <p className="mt-1 text-sm text-gray-500">
-              Upload a single-sheet .xlsx file with flashcards and/or multiple-choice questions
-              (max {MAX_IMPORT_ROWS} rows). A new draft quiz is created (US-021).
+              Upload a single-sheet .xlsx file with flashcards only (max {MAX_IMPORT_ROWS}{' '}
+              rows). On success, a new draft quiz opens in the editor (US-021).
             </p>
 
-            <form ref={formRef} action={formAction} className="mt-4 space-y-4">
+            <form action={formAction} className="mt-4 space-y-4">
               <div>
                 <label htmlFor="import-title" className="block text-sm font-medium text-gray-700 mb-1">
                   Quiz title *
@@ -108,7 +100,7 @@ export function ImportQuizDialog() {
                   className="w-full text-sm text-gray-700 file:mr-3 file:px-3 file:py-2 file:rounded-lg file:border-0 file:bg-brand-50 file:text-brand-700 file:text-sm file:font-medium hover:file:bg-brand-100"
                 />
                 <p className="mt-1 text-sm text-gray-500">
-                  Columns: Type, Prompt, Back, Option1-4, CorrectOptions, Position (optional).
+                  Columns: Type, Prompt, Back, Position (optional).
                 </p>
               </div>
 
