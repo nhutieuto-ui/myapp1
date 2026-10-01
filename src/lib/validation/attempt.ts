@@ -21,4 +21,10 @@ export const submitAttemptSchema = z.object({
   answers: z.array(answerSchema),
 });
 
+// Instant per-question feedback for the card-style MCQ play UI (not the final scored submission)
+export const checkMcqAnswerSchema = z.object({
+  questionId: z.string().trim().min(1),
+  selectedOptions: z.array(z.number().int().min(0)).min(1),
+});
+
 export type SubmitAttemptInput = z.infer<typeof submitAttemptSchema>;

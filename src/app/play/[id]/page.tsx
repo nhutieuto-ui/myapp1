@@ -26,7 +26,15 @@ function shuffle<T>(items: T[]): T[] {
 function toPlayableQuestion(question: { id: string; type: string; data: unknown }): PlayableQuestion {
   if (question.type === 'mcq') {
     const data = question.data as McqData;
-    return { id: question.id, type: 'mcq', prompt: data.prompt, options: data.options.map((o) => o.text) };
+    // Safe to expose whether multiple options are correct without revealing which ones (US-013 security NFR)
+    const multiple = data.options.filter((o) => o.correct).length > 1;
+    return {
+      id: question.id,
+      type: 'mcq',
+      prompt: data.prompt,
+      options: data.options.map((o) => o.text),
+      multiple,
+    };
   }
   if (question.type === 'sentence_rearrangement') {
     const data = question.data as SentenceData;

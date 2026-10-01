@@ -3,7 +3,7 @@
 import { and, asc, eq, ne } from 'drizzle-orm';
 import { db } from '@/lib/db';
 import { attempts, questions, quizzes, responses } from '@/lib/db/schema';
-import { submitAttemptSchema } from '@/lib/validation/attempt';
+import { checkMcqAnswerSchema, submitAttemptSchema } from '@/lib/validation/attempt';
 
 type McqData = { prompt: string; options: { text: string; correct: boolean }[] };
 type SentenceData = { sentence: string; segments: string[]; distractors: string[] };
@@ -100,4 +100,41 @@ export async function submitAttempt(
   );
 
   return { success: true, score, total: scoredQuestionCount };
+}
+
+export type CheckMcqAnswerResult = { error: string } | { correct: boolean; correctOptions: number[] };
+
+// Instant per-question feedback for the card-style MCQ play UI. Does not persist a response —
+// submitAttempt() at the end of the quiz remains the sole authoritative grading/storage path.
+export async function checkMcqAnswer(quizId: string, input: unknown): Promise<CheckMcqAnswerResult> {
+  const parsed = checkMcqAnswerSchema.safeParse(input);
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? 'Invalid request.' };
+  }
+
+  // AC9: only a quiz that is public or unlisted may be played
+  const [quiz] = await db
+    .select()
+    .from(quizzes)
+    .where(and(eq(quizzes.id, quizId), ne(quizzes.status, 'draft')))
+    .limit(1);
+  if (!quiz) {
+    return { error: 'This quiz is not available to play.' };
+  }
+
+  const [question] = await db
+    .select()
+    .from(questions)
+    .where(and(eq(questions.id, parsed.data.questionId), eq(questions.quizId, quizId)))
+    .limit(1);
+  if (!question || question.type !== 'mcq') {
+    return { error: 'This question is not available.' };
+  }
+
+  const data = question.data as McqData;
+  const correctOptions = data.options
+    .map((option, index) => (option.correct ? index : -1))
+    .filter((index) => index >= 0);
+  const correct = sameSelection(parsed.data.selectedOptions, correctOptions);
+  return { correct, correctOptions };
 }
