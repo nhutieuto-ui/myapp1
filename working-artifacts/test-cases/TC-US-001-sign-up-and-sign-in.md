@@ -1,0 +1,28 @@
+# Test Cases — US-001 Sign up and sign in with a role and age band
+
+| Field | Value |
+| --- | --- |
+| Source requirement | [US-001](../user-stories/language-learning-quiz-app/epic-a-identity-access-consent/us-001-sign-up-and-sign-in.md) |
+| Requirement analysis | [Findings-Requirements-Analysis-language-learning-quiz-app-phase1.md](../test-analysis-reports/Findings-Requirements-Analysis-language-learning-quiz-app-phase1.md) — Readiness: Ready |
+| Scope | Functional only |
+| Module prefix | `AUTH` |
+
+| Test Case ID | Title | Test Steps | Expected Result | Requirement | Testing Technique | Priority | Preconditions | Test Data | Automation |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TC_AUTH_001 | Verify a visitor can sign up as a tutor using the email provider | 1. Open sign-up<br>2. Choose role "Tutor"<br>3. Choose the email provider and complete authentication<br>4. Declare age band "18+"<br>5. Submit | Account is created with role Tutor; user is signed in and sees their home view | US-001 AC1 | Use Case Testing | Critical | Visitor is not signed in; email provider configured | Role: Tutor; Provider: Email; Email: tutor1@test.com; Age band: 18+ | Yes |
+| TC_AUTH_002 | Verify a visitor can sign up as a learner using the Google provider | 1. Open sign-up<br>2. Choose role "Learner"<br>3. Choose Google provider and complete authentication<br>4. Declare age band "13-17"<br>5. Submit | Account is created with role Learner; user is signed in and sees their home view | US-001 AC1 | Equivalence Partitioning (provider) | High | Visitor is not signed in; Google provider configured | Role: Learner; Provider: Google; Age band: 13-17 | Yes |
+| TC_AUTH_003 | Verify an existing user can sign in with their registered provider | 1. Open sign-in<br>2. Authenticate with the provider used at registration | User is signed in; only their own content is visible | US-001 AC2 | Use Case Testing | Critical | Account already exists | Registered email/Google account | Yes |
+| TC_AUTH_004 | Verify sign-up is blocked when no age band is declared | 1. Open sign-up<br>2. Choose a role and authenticate<br>3. Leave age band undeclared<br>4. Attempt to finish sign-up | Account is not created; user is told an age band is required | US-001 AC3 | Equivalence Partitioning (missing required field) | High | Visitor is not signed in | Age band: (none selected) | Yes |
+| TC_AUTH_005 | Verify one account can author a quiz and play another author's quiz | 1. Sign in<br>2. Create a quiz<br>3. Open a quiz published by a different author<br>4. Complete and submit an attempt on it | Both actions succeed under the same account; the created quiz is listed as mine; the attempt is recorded as mine | US-001 AC4 | Use Case Testing | Medium | Signed in; another author's published quiz exists | — | Yes |
+| TC_AUTH_006 | Verify sign-up is blocked for an age band below the minimum age of 6 | 1. Open sign-up<br>2. Complete role and provider steps<br>3. Declare an age band below 6<br>4. Submit | No account is created; an explanation is shown; no further personal data is stored | US-001 AC5 | Boundary Value Analysis | Critical | Visitor is not signed in | Age band: under 6 | Yes |
+| TC_AUTH_007 | Verify sign-up succeeds at the minimum-age boundary (age band containing 6) | 1. Open sign-up<br>2. Complete role and provider steps<br>3. Declare the age band that contains age 6<br>4. Submit | Account is created successfully | US-001 AC5 (boundary) | Boundary Value Analysis | High | Visitor is not signed in | Age band: 6 (lower edge of lowest valid band) | Yes |
+| TC_AUTH_008 | Verify a draft quiz is inaccessible to a different signed-in user | 1. Sign in as User A and create a quiz draft (do not publish or share)<br>2. Sign in as User B<br>3. Attempt to open User A's draft quiz | Access is denied; quiz content is not returned | US-001 AC6 | Access Control (Negative) | Critical | User A owns an unpublished quiz; User B is signed in | Two distinct accounts | Yes |
+| TC_AUTH_009 | Verify a draft quiz is inaccessible to an anonymous visitor | 1. As an anonymous visitor, attempt to open a known draft quiz's URL | Access is denied; quiz content is not returned | US-001 AC6 | Access Control (Negative) | Critical | A draft quiz exists; visitor is not signed in | — | Yes |
+| TC_AUTH_010 | Verify signing out ends the session and requires re-authentication | 1. Sign in<br>2. Sign out<br>3. Attempt to open an authenticated view (e.g., "My quizzes") | Session is ended; user is required to sign in again before the view is shown | US-001 AC7 | State Transition Testing | High | Signed in | — | Yes |
+| TC_AUTH_011 | Verify a tutor's content-rights confirmation is recorded at sign-up | 1. Sign up choosing role "Tutor"<br>2. Complete sign-up | Confirmation that uploaded media will be rights-cleared is recorded against the account with a timestamp | US-001 AC8 | Use Case Testing | Medium | Visitor is not signed in | Role: Tutor | No |
+
+## Coverage notes
+
+- AC1–AC8 of US-001 are each covered by at least one positive case; AC3, AC5, AC6 additionally receive negative/boundary cases per the Boundary Value Analysis and Equivalence Partitioning guidance in `test-design-techniques.md`.
+- Age-verification mechanics (A-11) and guardian-consent routing for minors are intentionally **not** duplicated here — they are covered in [TC-US-002](TC-US-002-guardian-consent-for-minors.md) once US-002 is cleared of its D-6 Legal-sign-off gap (see the requirement analysis Findings log).
+- TC_AUTH_011's exact UI/record format is not specified in the story; automation is marked "No" until the rights-confirmation record is inspectable via a documented API/UI surface.

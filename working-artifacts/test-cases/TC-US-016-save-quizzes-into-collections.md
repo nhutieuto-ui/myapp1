@@ -1,0 +1,27 @@
+# Test Cases — US-016 Save quizzes into personal collections
+
+| Field | Value |
+| --- | --- |
+| Source requirement | [US-016](../user-stories/language-learning-quiz-app/epic-f-student-collections/us-016-save-quizzes-into-collections.md) |
+| Requirement analysis | [Findings-Requirements-Analysis-language-learning-quiz-app-phase1.md](../test-analysis-reports/Findings-Requirements-Analysis-language-learning-quiz-app-phase1.md) — Readiness: Ready |
+| Scope | Functional only |
+| Module prefix | `COLLECTION` |
+
+| Test Case ID | Title | Test Steps | Expected Result | Requirement | Testing Technique | Priority | Preconditions | Test Data | Automation |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TC_COLLECTION_001 | Verify saving a quiz into a new collection creates the collection and contains the quiz | 1. Open a quiz I can access<br>2. Save it<br>3. Create a new named collection | Collection is created; the quiz appears inside it | US-016 AC1 | Use Case Testing | Critical | Signed in; at least one quiz is accessible | Collection name: "Beginner Vocabulary" | Yes |
+| TC_COLLECTION_002 | Verify saving another quiz into an existing collection lists both quizzes | 1. Open an existing collection containing one quiz<br>2. Save a different quiz into the same collection | Both quizzes are listed in that collection | US-016 AC2 | Use Case Testing | High | A collection already exists with one quiz saved | — | Yes |
+| TC_COLLECTION_003 | Verify another signed-in user cannot view my collections | 1. Sign in as User A and create a collection<br>2. Sign in as User B<br>3. Attempt to view User A's collections | Access is denied | US-016 AC3 | Access Control (Negative) | Critical | User A has at least one collection; User B is signed in | — | Yes |
+| TC_COLLECTION_004 | Verify an anonymous visitor cannot view my collections | 1. Create a collection while signed in<br>2. As an anonymous visitor, attempt to view that collection | Access is denied | US-016 AC3 | Access Control (Negative) | Critical | A collection exists; visitor is not signed in | — | Yes |
+| TC_COLLECTION_005 | Verify renaming a collection applies only to my library | 1. Open one of my collections<br>2. Rename it | Collection reflects the new name in my library only; underlying quizzes are unaffected | US-016 AC4 | Use Case Testing | Medium | At least one collection exists | New name: "Advanced Practice" | Yes |
+| TC_COLLECTION_006 | Verify removing a quiz from a collection does not affect the underlying quiz | 1. Open a collection containing a quiz<br>2. Remove that quiz from the collection<br>3. Open the quiz directly (outside the collection) | Quiz is removed from the collection; the quiz itself remains unaffected and still accessible on its own | US-016 AC4 | Use Case Testing | Medium | Collection contains at least one quiz | — | Yes |
+| TC_COLLECTION_007 | Verify deleting a collection removes it from my library without affecting the underlying quizzes | 1. Delete one of my collections<br>2. Open one of the quizzes that was in the deleted collection, directly | Collection no longer appears in my library; the quiz itself is still accessible | US-016 AC4 | Use Case Testing | Medium | At least one collection exists with a quiz in it | — | Yes |
+| TC_COLLECTION_008 | Verify opening a saved quiz from a collection and playing it records a new attempt | 1. Open a quiz from one of my collections<br>2. Play and submit it | A new attempt is recorded | US-016 AC5 | Use Case Testing | High | Quiz is saved in one of my collections | — | Yes |
+| TC_COLLECTION_009 | Verify a saved quiz that is later unpublished or taken down shows as no longer available | 1. Save a quiz into a collection<br>2. As the author (or a moderator), unpublish or take down that quiz<br>3. Open my collection | Entry is shown as no longer available; its content cannot be opened | US-016 AC6 | State Transition Testing | High | Quiz is saved in a collection and is subsequently unpublished/taken down | — | Yes |
+| TC_COLLECTION_010 | Verify saving a quiz already in a collection again does not duplicate it | 1. Save a quiz into a collection<br>2. Save the same quiz into the same collection a second time | Quiz is not duplicated in the collection; user is told it is already saved there | US-016 AC7 | Equivalence Partitioning | Medium | Quiz is already saved in the target collection | — | Yes |
+| TC_COLLECTION_011 | Verify an account-free joiner cannot save a quiz to a collection without first creating an account | 1. Join a quiz account-free via link/QR (no sign-in)<br>2. Attempt to save the quiz into a collection | Save is not available/is rejected; the player is told an account is required to use collections | US-016 AS-016.4 | Access Control (Negative) | Medium | Player joined a quiz without creating an account | — | Yes |
+
+## Coverage notes
+- AC1–AC7 are each covered by at least one test case; TC_COLLECTION_011 additionally covers the account-required constraint (AS-016.4) that governs who can use this feature at all.
+- Out-of-scope items explicitly not covered: sharing collections with others, tutor-side collections (confirmed out of scope, DEC-51), and a default "Saved" collection / one-click save (confirmed out of scope, DEC-52).
+- Cross-reference: account-free joining itself is covered in [TC-US-012-join-quiz-via-link-or-qr.md](TC-US-012-join-quiz-via-link-or-qr.md); this file only tests the boundary where that player attempts to use an account-gated feature.

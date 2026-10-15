@@ -1,0 +1,27 @@
+# Test Cases — US-007 Attach an image or audio clip to a question
+
+| Field | Value |
+| --- | --- |
+| Source requirement | [US-007](../user-stories/language-learning-quiz-app/epic-b-quiz-authoring-media/us-007-attach-image-or-audio.md) |
+| Requirement analysis | [Findings-Requirements-Analysis-language-learning-quiz-app-phase1.md](../test-analysis-reports/Findings-Requirements-Analysis-language-learning-quiz-app-phase1.md) — Readiness: Ready |
+| Scope | Functional only |
+| Module prefix | `MEDIA` |
+
+| Test Case ID | Title | Test Steps | Expected Result | Requirement | Testing Technique | Priority | Preconditions | Test Data | Automation |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| TC_MEDIA_001 | Verify a supported image can be attached to a question | 1. Open a quiz draft question for editing<br>2. Upload a supported image file within the size limit<br>3. Save | Image is stored and attached to the question; a preview is shown in the editor | US-007 AC1 | Use Case Testing | Critical | Editing a quiz draft question | Image: JPEG, 500KB | Yes |
+| TC_MEDIA_002 | Verify a supported audio clip can be attached to a question | 1. Open a quiz draft question for editing<br>2. Upload a supported audio file within the size limit<br>3. Save | Audio is attached and can be played back in the editor | US-007 AC2 | Use Case Testing | Critical | Editing a quiz draft question | Audio: MP3, 800KB | Yes |
+| TC_MEDIA_003 | Verify uploading an unsupported file type is rejected | 1. Open a quiz draft question for editing<br>2. Attempt to upload a file of an unsupported type (e.g. .exe or .pdf) | Upload is rejected; user is told which file types are supported | US-007 AC3 | Equivalence Partitioning | High | Editing a quiz draft question | File: document.pdf | Yes |
+| TC_MEDIA_004 | Verify uploading a file exceeding the 2MB size cap is rejected | 1. Open a quiz draft question for editing<br>2. Attempt to upload a supported-format file larger than 2MB | Upload is rejected; user is told the applicable size limit (2MB, DEC-25) | US-007 AC4 (DEC-25) | Boundary Value Analysis | Critical | Editing a quiz draft question | Image: JPEG, 2.1MB | Yes |
+| TC_MEDIA_005 | Verify a file exactly at the 2MB size cap is accepted (upper boundary, valid) | 1. Open a quiz draft question for editing<br>2. Upload a supported-format file of exactly 2MB | File is accepted and attached successfully | US-007 AC4 (boundary, DEC-25) | Boundary Value Analysis | High | Editing a quiz draft question | Image: PNG, exactly 2MB (2,097,152 bytes) | Yes |
+| TC_MEDIA_006 | Verify no partial media remains attached after a failed or interrupted upload | 1. Begin uploading a supported file<br>2. Interrupt the upload (e.g. network loss) before it completes<br>3. Return to the editor | No partial or broken media reference is attached to the question; the author can retry the upload | US-007 AC5 | Error Guessing | High | Editing a quiz draft question; simulated network interruption | Audio: WAV, 1MB | Yes |
+| TC_MEDIA_007 | Verify attached media can be replaced with a different file | 1. Open a question that already has media attached<br>2. Upload a different supported file to replace it<br>3. Save | The question reflects the new media; the question remains valid and playable | US-007 AC6 | Use Case Testing | Medium | Question already has media attached | Replacement image: WebP, 300KB | Yes |
+| TC_MEDIA_008 | Verify attached media can be removed from a question | 1. Open a question that already has media attached<br>2. Remove the attached media<br>3. Save | The question no longer has media attached; the question remains valid and playable | US-007 AC6 | Use Case Testing | Medium | Question already has media attached | — | Yes |
+| TC_MEDIA_009 | Verify media on a draft (unpublished) quiz is not reachable by an unauthenticated visitor | 1. As an anonymous visitor, obtain the direct media URL of a question belonging to a draft quiz<br>2. Attempt to request that media URL directly | Media is not served; request is denied | US-007 AC7 | Access Control (Negative) | Critical | A draft quiz with attached media exists; visitor is not signed in | Draft quiz media URL | Yes |
+| TC_MEDIA_010 | Verify media upload does not prompt a separate per-upload rights confirmation for a tutor who confirmed rights at sign-up | 1. Sign in as a tutor who already confirmed content rights at sign-up (US-001 AC8)<br>2. Upload media for a question | Media is attached without a separate per-upload rights prompt; the asset is linked to the account-level rights confirmation for takedown review purposes | US-007 AC8 (DEC-27) | Use Case Testing | Medium | Tutor account has an existing rights confirmation from sign-up | Image: GIF, 400KB | No |
+
+## Coverage notes
+- AC1–AC8 are each covered by at least one test case; AC4 includes both the rejection (invalid) and the exact-boundary (valid) case per DEC-25.
+- Video attachment (US-008) is explicitly out of scope (DEC-28) and is not covered here.
+- Media storage architecture (object storage/CDN, no in-request processing — C-2, C-3) is an implementation detail not directly observable at the functional test level; TC_MEDIA_006 approximates it via an interrupted-upload scenario.
+- TC_MEDIA_010 is marked Automation = No because verifying the *absence* of a UI prompt combined with an account-level data linkage is better suited to manual/exploratory verification during this phase.
